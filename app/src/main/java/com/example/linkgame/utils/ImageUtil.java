@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.example.linkgame.MyApplication;
 import com.example.linkgame.R;
 import com.example.linkgame.View.PieceImage;
 
@@ -50,23 +51,32 @@ public class ImageUtil {
      * 随机从sourceValues的集合中获取size个图片ID, 返回结果为图片ID的集合
      *
      * @param sourceValues 从中获取的集合
-     * @param size         需要获取的个数
+     * @param size         需要获取的个数  // 一定要是偶数
      * @return size个图片ID的集合
      */
-    public static List<Integer> getRandomValues(List<Integer> sourceValues,
-                                                int size) {
+    public static List<Integer> getRandomValues(List<Integer> sourceValues, int size) {
         // 创建一个随机数生成器
         Random random = new Random();
         // 创建结果集合
         List<Integer> result = new ArrayList<Integer>();
+
+
         for (int i = 0; i < size; i++) {
             try {
                 // 随机获取一个数字，大于、小于sourceValues.size()的数值
-                int index = random.nextInt(sourceValues.size());
-                // 从图片ID集合中获取该图片对象
-                Integer image = sourceValues.get(index);
+                int index = random.nextInt(GameConf.IMG_NUM);
+
+                // 从图片ID集合中获取该图片对象  中文图
+//                Integer image = MyApplication.getContext().getResources().getIdentifier("zh_"+index, "drawable", MyApplication.getPkgName());
+                // 偶数为中文图, 奇数为英文图
+                Integer image = MyApplication.getContext().getResources().getIdentifier(i/2==0?"zh_":"cn_"+index, "drawable", MyApplication.getPkgName());
                 // 添加到结果集中
                 result.add(image);
+
+//                // 从图片ID集合中获取该图片对象  英文图
+//                image = MyApplication.getContext().getResources().getIdentifier("en_"+index, "drawable", MyApplication.getPkgName());
+//                // 添加到结果集中
+//                result.add(image);
             } catch (IndexOutOfBoundsException e) {
                 return result;
             }

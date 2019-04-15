@@ -7,21 +7,25 @@ import android.content.Context;
  */
 public class GameConf {
     /**
+     * 图片资源的数量
+     */
+    public static final int IMG_NUM = 260;
+    /**
      * X轴有几个方块
      */
-    public final static int PIECE_X_SUM = 6;
+    public static final int PIECE_X_SUM = 6;
     /**
      * Y轴有几个方块
      */
-    public final  static int PIECE_Y_SUM = 8;
+    public static final int PIECE_Y_SUM = 8;
     /**
      * 从哪里开始画第一张图片出现的x座标
      */
-    public final  static int BEGIN_IMAGE_X = 25;
+    public static final int BEGIN_IMAGE_X = 25;
     /**
      * 从哪里开始画第一张图片出现的x座标
      */
-    public final  static int BEGIN_IMAGE_Y = 75;
+    public static final int BEGIN_IMAGE_Y = 75;
 
     /**
      * 连连看的每个方块的图片的宽   启动的时候赋值
