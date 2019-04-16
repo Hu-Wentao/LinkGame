@@ -7,13 +7,13 @@ import android.content.Context;
  */
 public class GameConf {
     /**
-     * 图片资源的数量
+     * 图片资源的数量 // 资源图片为 从0开始到 519, 其中偶数为中文图, 奇数为英文图
      */
-    public static final int IMG_NUM = 260;
+    public static final int ALL_IMG_NUM = 259;
     /**
      * X轴有几个方块
      */
-    public static final int PIECE_X_SUM = 6;
+    public static final int PIECE_X_SUM = 5;
     /**
      * Y轴有几个方块
      */
@@ -72,10 +72,9 @@ public class GameConf {
      * @param beginImageX Board中第一张图片出现的x座标
      * @param beginImageY Board中第一张图片出现的y座标
      * @param gameTime    设置每局的时间, 单位是豪秒
-     * @param context     应用上下文
      */
     public GameConf(int xSize, int ySize, int beginImageX, int beginImageY,
-                    long gameTime, Context context) {
+                    long gameTime) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.beginImageX = beginImageX;
@@ -119,10 +118,4 @@ public class GameConf {
         return beginImageY;
     }
 
-    /**
-     * @return 应用上下文
-     */
-    public Context getContext() {
-        return context;
-    }
 }

@@ -4,7 +4,7 @@ import android.graphics.Point;
 
 /**
  * 连连看游戏中的方块对象
- * */
+ */
 public class Piece {
     /**
      * 保存方块对象的所对应的图片
@@ -53,7 +53,6 @@ public class Piece {
      *
      * @param otherPieceImage 另外的一个Piece对象
      * @return 是否相同
-     * // todo 新增一个 isLinkImage, 判断两个图片是否是一对
      */
     public boolean isSameImage(Piece otherPieceImage) {
         if (pieceImage == null) {
@@ -61,8 +60,12 @@ public class Piece {
                 return false;
             }
         }
-        // 当两个Piece封装图片资源ID相同时，即可认为这两个Piece上的图片相同。
-        return pieceImage.getImageId() == otherPieceImage.pieceImage.getImageId();
+//        // 当两个Piece封装图片资源ID相同时，即可认为这两个Piece上的图片相同。
+//        return pieceImage.getImageId() == otherPieceImage.pieceImage.getImageId();
+
+        // 当 piece的Id为偶数时, 如果+1 == other的Id, 则为真
+        // 当 piece的Id为奇数是, 如果-1 == other的Id ,则为真
+        return pieceImage.getImageId() + ((pieceImage.getImageId() % 2 == 0) ? 1 : -1) == otherPieceImage.pieceImage.getImageId();
     }
 
     /**

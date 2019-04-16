@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 
 /**
@@ -42,22 +41,24 @@ public class GameServiceImpl implements GameService {
     public void start() {
         // 定义一个AbstractPanel对象
         AbstractPanel board = null;
-        Random random = new Random();
-        // 获取一个随机数, 可取值0、1、2、3四值。
-        int index = random.nextInt(4);
-        // 随机生成AbstractPanel的子类实例
+//        Random random = new Random();
+//        // 获取一个随机数, 可取值0、1、2、3四值。
+//        int index = random.nextInt(4);
+//        // 随机生成AbstractPanel的子类实例
+
+        int index = 1;  // 只使用水平面板
         switch (index) {
             case 0:
                 // 0返回VerticalBoard(竖向)
-                board = new VerticalBoard();
+                board = new VerticalPanel();
                 break;
             case 1:
                 // 1返回HorizontalBoard(横向)
-                board = new HorizontalBoard();
+                board = new HorizontalPanel();
                 break;
             default:
                 // 默认返回FullBoard
-                board = new FullBoard();
+                board = new FullPanel();
                 break;
         }
         // 初始化Piece[][]数组

@@ -109,7 +109,7 @@ import com.example.linkgame.utils.SizeUtils;
             int beginImageX = SizeUtils.dp2Px(this, GameConf.BEGIN_IMAGE_X);
             int beginImageY = SizeUtils.dp2Px(this, GameConf.BEGIN_IMAGE_Y);
 
-            config = new GameConf(GameConf.PIECE_X_SUM, GameConf.PIECE_X_SUM, beginImageX, beginImageY, GameConf.DEFAULT_TIME, this);
+            config = new GameConf(GameConf.PIECE_X_SUM, GameConf.PIECE_Y_SUM, beginImageX, beginImageY, GameConf.DEFAULT_TIME);
             // 得到游戏区域对象
             gameView =  findViewById(R.id.gameView);
             // 获取显示剩余时间的文本框

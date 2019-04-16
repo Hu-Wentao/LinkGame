@@ -2,6 +2,7 @@ package com.example.linkgame;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 /**
  * @Author: hu.wentao@outlook.com
@@ -22,4 +23,5 @@ public class MyApplication extends Application {
     public static String getPkgName(){
         return context.getPackageName();
     }
+
 }

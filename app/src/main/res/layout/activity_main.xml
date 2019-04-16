@@ -11,27 +11,16 @@
     <LinearLayout
         android:id="@+id/controlPanel"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="#1e72bb"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
         <!-- 控制游戏开始的按钮,该按钮的背景图片可以根据按钮的状态改变 -->
-        <Button
-            android:id="@+id/startButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_radius"
-            android:backgroundTint="@android:color/holo_orange_light"
-            android:text="开始游戏"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
         <!-- 显示游戏剩余时间的文本框 -->
         <TextView
             android:id="@+id/timeText"
@@ -41,9 +30,30 @@
             android:layout_marginRight="50dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="#ff9"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
+            android:textStyle="bold"
             tools:text="剩余时间:60" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="2dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/shape_radius"
+
+            android:backgroundTint="@color/colorPrimary"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="开始游戏"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- 游戏主界面的自定义组件 -->
@@ -51,6 +61,7 @@
         android:id="@+id/gameView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/controlPanel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
