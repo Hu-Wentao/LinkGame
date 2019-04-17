@@ -95,7 +95,7 @@ public class GameView extends View {
         if (this.gameService == null) {
             return;
         }
-        Piece[][] pieces = gameService.getPieces();
+        Piece[][] pieces = gameService.getPieceArr();
         if (pieces != null) {
             // 遍历pieces二维数组
             for (int i = 0; i < pieces.length; i++) {
@@ -134,12 +134,13 @@ public class GameView extends View {
      * @param canvas   画布
      */
     private void drawLine(LinkInfo linkInfo, Canvas canvas) {
-        // 获取LinkInfo中封装的所有连接点
-        List<int[]> points = linkInfo.getLinkPoints();
-        // 依次遍历linkInfo中的每个连接点
+        // todo 暂时不划线
+//        // 获取LinkInfo中封装的所有连接点
+//        List<Point> points = linkInfo.getLinkPoints(gameService, getWidth(), getHeight());
+//
+////         依次遍历linkInfo中的每个连接点
 //        for (int i = 0; i < points.size() - 1; i++) {
 //            // 获取当前连接点与下一个连接点
-//            // todo 在此处将索引转换为Point        // todo 测试时不划线
 //            Point currentPoint = points.get(i);
 //            Point nextPoint = points.get(i + 1);
 //            // 绘制连线
@@ -153,4 +154,5 @@ public class GameView extends View {
         this.gameService.start();
         this.postInvalidate();
     }
+
 }

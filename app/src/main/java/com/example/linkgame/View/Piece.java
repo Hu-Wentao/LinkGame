@@ -44,8 +44,8 @@ public class Piece {
      * @return 中心点的坐标对象Point
      */
     public Point getCenter() {
-        return new Point(getBeginX() + getPieceImage().getImage().getWidth()
-                / 2, getBeginY() + getPieceImage().getImage().getHeight() / 2);
+        return new Point(getBeginX() + getPieceImage().getImage().getWidth() / 2,
+                getBeginY() + getPieceImage().getImage().getHeight() / 2);
     }
 
     /**

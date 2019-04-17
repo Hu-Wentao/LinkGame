@@ -15,10 +15,12 @@ public interface GameService {
 
     /**
      * 定义一个接口方法, 用于返回一个二维数组
+     * * 定义一个Piece[][]数组, 存放的是当前所显示的 图片
+     * * 使用 getPiecesArr() 来获取
      *
      * @return 存放方块对象的二维数组
      */
-    Piece[][] getPieces();
+    Piece[][] getPieceArr();
 
     /**
      * 判断参数Piece[][]数组中是否还存在非空的Piece对象

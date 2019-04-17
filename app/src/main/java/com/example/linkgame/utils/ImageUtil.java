@@ -7,13 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-import com.example.linkgame.MyApplication;
 import com.example.linkgame.R;
 import com.example.linkgame.View.PieceImage;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 

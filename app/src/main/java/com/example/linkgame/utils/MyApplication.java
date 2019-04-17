@@ -1,4 +1,4 @@
-package com.example.linkgame;
+package com.example.linkgame.utils;
 
 import android.app.Application;
 import android.content.Context;

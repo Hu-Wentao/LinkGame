@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">连连看</string>
 
+    <string name="student_login">学生登录</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登录</string>
+    <string name="register_tip">没有账号？注册一个</string>
+    <string name="register">注册</string>
+    <string name="real_name">姓名</string>
+    <string name="number">学号</string>
+
+
+
+
     <string name="game_time">剩余时间：</string>
     <string name="lost">Lost</string>
     <string name="lost_restart">游戏失败！ 重新开始</string>

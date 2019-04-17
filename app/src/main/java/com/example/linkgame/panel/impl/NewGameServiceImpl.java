@@ -1,7 +1,6 @@
 package com.example.linkgame.panel.impl;
 
 import android.graphics.Point;
-import android.support.v4.app.INotificationSideChannel;
 
 import com.example.linkgame.View.Piece;
 import com.example.linkgame.panel.AbstractPanel;
@@ -22,8 +21,9 @@ import java.util.Map;
 public class NewGameServiceImpl implements GameService {
     /**
      * 定义一个Piece[][]数组, 存放的是当前所显示的 图片
+     * 使用 getPiecesArr() 来获取
      */
-    private Piece[][] pieces;
+    private Piece[][] piecesArr;
     /**
      * 游戏配置对象
      */
@@ -66,21 +66,21 @@ public class NewGameServiceImpl implements GameService {
                 break;
         }
         // 初始化Piece[][]数组
-        this.pieces = board.create(config);
+        this.piecesArr = board.create(config);
     }
 
     @Override
-    public Piece[][] getPieces() {
-        return this.pieces;
+    public Piece[][] getPieceArr() {
+        return this.piecesArr;
     }
 
     @Override
     public boolean hasPieces() {
         // 遍历Piece[][]数组的每个元素
-        for (int i = 0; i < pieces.length; i++) {
-            for (int j = 0; j < pieces[i].length; j++) {
+        for (int i = 0; i < piecesArr.length; i++) {
+            for (int j = 0; j < piecesArr[i].length; j++) {
                 // 只要任意一个数组元素不为null，也就是还剩有非空的Piece对象
-                if (pieces[i][j] != null) {
+                if (piecesArr[i][j] != null) {
                     return true;
                 }
             }
@@ -104,7 +104,7 @@ public class NewGameServiceImpl implements GameService {
 
         // 返回Piece[][]数组的指定元素
         System.out.println("指定的元素为数组Piece[][]中的 piece" + Arrays.toString(arr));     //todo
-        return this.pieces[arr[0]][arr[1]];
+        return this.piecesArr[arr[0]][arr[1]];
     }
 
     /**
@@ -150,6 +150,8 @@ public class NewGameServiceImpl implements GameService {
     private int[] findPieceIndex(Point p) {
         return findPieceIndex(p.x, p.y);
     }
+
+
 
     /**
      * 工具方法：计算相对于Piece[][]数组的第一维 或第二维的索引值
@@ -460,7 +462,7 @@ public class NewGameServiceImpl implements GameService {
         for (int i = 0; i < infos.size(); i++) {
             LinkInfo info = infos.get(i);
             // 计算出几个点的总距离
-            int distance = countAll(info.getLinkPoints());
+            int distance = countAll(info.getLinkPointsIndex());
             // 将循环第一个的差距用temp1保存
             if (i == 0) {
                 temp1 = distance - shortDistance;
@@ -680,7 +682,7 @@ public class NewGameServiceImpl implements GameService {
         }
         for (int i = index[0][xOrY] + 1; i < index[1][xOrY]; i++) {
             // index[0][1] 表示 [点A 或者点B] 的 [Y或X] 的值
-            if (pieces[i][index[0][xOrY]] != null) { // 有障碍 // todo 需要保证已经被消除的图片, 在Piece[][] 中会赋值为null
+            if (piecesArr[i][index[0][xOrY]] != null) { // 有障碍 // todo 需要保证已经被消除的图片, 在Piece[][] 中会赋值为null
                 return true;
             }
         }
@@ -700,7 +702,7 @@ public class NewGameServiceImpl implements GameService {
 //            return isXBlock(indexB, indexA);
 //        }
 //        for (int i = indexA[0] + 1; i < indexB[0]; i++) {
-//            if (pieces[i][indexB[1]] != null) {// 有障碍
+//            if (piecesArr[i][indexB[1]] != null) {// 有障碍
 //                return true;
 //            }
 //        }
@@ -718,17 +720,17 @@ public class NewGameServiceImpl implements GameService {
 //        if (findPiece(x, y) == null)
 //            return false;
         // 方式 OOB 发生
-        if(x>=pieces.length){
-            System.out.println("x越界!当前x边界为" + pieces.length);   //todo
-            x = pieces.length-1;
+        if(x>= piecesArr.length){
+            System.out.println("x越界!当前x边界为" + piecesArr.length);   //todo
+            x = piecesArr.length-1;
         }
-        if(y>=pieces[x].length){
-            System.out.println("y越界!当前x边界为" + pieces[x].length);   //todo
-            y = pieces[x].length-1;
+        if(y>= piecesArr[x].length){
+            System.out.println("y越界!当前x边界为" + piecesArr[x].length);   //todo
+            y = piecesArr[x].length-1;
         }
 
-        return pieces[x][y] == null;  // 此处发生数组越界
-//        return pieces[y][x] == null;
+        return piecesArr[x][y] == null;  // 此处发生数组越界
+//        return piecesArr[y][x] == null;
     }
 
     /**

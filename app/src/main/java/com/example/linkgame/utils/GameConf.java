@@ -23,9 +23,9 @@ public class GameConf {
      */
     public static final int BEGIN_IMAGE_X = 25;
     /**
-     * 从哪里开始画第一张图片出现的x座标
+     * 从哪里开始画第一张图片出现的y座标
      */
-    public static final int BEGIN_IMAGE_Y = 75;
+    public static final int BEGIN_IMAGE_Y = 50;
 
     /**
      * 连连看的每个方块的图片的宽   启动的时候赋值
@@ -36,7 +36,7 @@ public class GameConf {
      */
     public static int PIECE_HEIGHT;
     /**
-     * 记录游戏的总事件（100秒）.
+     * 默认一局游戏的时长（100秒）.
      */
     public static int DEFAULT_TIME = 100;
     /**
