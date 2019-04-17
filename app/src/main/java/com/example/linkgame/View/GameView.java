@@ -121,6 +121,7 @@ public class GameView extends View {
         }
         // 画选中标识的图片
         if (this.selectedPiece != null) {
+            System.out.println(this.selectedPiece.getPieceImage().getImageId());    //todo 打印选中图片id
             canvas.drawBitmap(this.selectImage, this.selectedPiece.getBeginX(),
                     this.selectedPiece.getBeginY(), null);
         }
@@ -134,16 +135,17 @@ public class GameView extends View {
      */
     private void drawLine(LinkInfo linkInfo, Canvas canvas) {
         // 获取LinkInfo中封装的所有连接点
-        List<Point> points = linkInfo.getLinkPoints();
+        List<int[]> points = linkInfo.getLinkPoints();
         // 依次遍历linkInfo中的每个连接点
-        for (int i = 0; i < points.size() - 1; i++) {
-            // 获取当前连接点与下一个连接点
-            Point currentPoint = points.get(i);
-            Point nextPoint = points.get(i + 1);
-            // 绘制连线
-            canvas.drawLine(currentPoint.x, currentPoint.y, nextPoint.x,
-                    nextPoint.y, this.paint);
-        }
+//        for (int i = 0; i < points.size() - 1; i++) {
+//            // 获取当前连接点与下一个连接点
+//            // todo 在此处将索引转换为Point        // todo 测试时不划线
+//            Point currentPoint = points.get(i);
+//            Point nextPoint = points.get(i + 1);
+//            // 绘制连线
+//            canvas.drawLine(currentPoint.x, currentPoint.y, nextPoint.x,
+//                    nextPoint.y, this.paint);
+//        }
     }
 
     // 开始游戏方法

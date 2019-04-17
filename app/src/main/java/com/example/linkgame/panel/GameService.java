@@ -28,7 +28,7 @@ public interface GameService {
     boolean hasPieces();
 
     /**
-     * 根据鼠标的x座标和y座标, 查找出一个Piece对象
+     * 根据点击的x座标和y座标, 查找出一个Piece对象
      *
      * @param touchX 鼠标点击的x座标
      * @param touchY 鼠标点击的y座标

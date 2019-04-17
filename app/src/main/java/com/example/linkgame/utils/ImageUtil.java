@@ -38,11 +38,12 @@ public class ImageUtil {
 
         // 获取图片ID组成的集合
         Object[] randomPicIndexList = getRandomPicIndexList(size);
+
         List<PieceImage> result = new ArrayList<PieceImage>();
         // 遍历每个图片ID
         for (Object value : randomPicIndexList) {
             Integer val = (Integer) value;
-            System.out.println(val);    //todo test
+//            System.out.println("###加载图片###"+val +(val%2==0?"\t中文":""));    //todo test
             // 加载图片
             Bitmap bm = drawableToBitmap(getAllDrawable()[val]);
             // 封装图片ID与图片本身
@@ -83,7 +84,7 @@ public class ImageUtil {
         List<Integer> playImageValues = new ArrayList<>(size);
         // 为List添加 size对 中文+英文 图, 共计size个
         Random random = new Random();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size/2; i++) {  // 此处 size/2 因为一个循环中添加了2个元素
             int t = random.nextInt(GameConf.ALL_IMG_NUM);
             playImageValues.add(t * 2);     // 添加一个 中文图的index
             playImageValues.add(t * 2 + 1); // 添加一个 中文图对应的英文图的index

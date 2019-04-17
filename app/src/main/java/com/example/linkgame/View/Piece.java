@@ -19,11 +19,11 @@ public class Piece {
      */
     private int beginY;
     /**
-     * 该对象在Piece[][]数组中第一维的索引值
+     * 该对象在Piece[][]数组中第一维的索引值  ##
      */
     private int indexX;
     /**
-     * 该对象在Piece[][]数组中第二维的索引值
+     * 该对象在Piece[][]数组中第二维的索引值  ##
      */
     private int indexY;
 
@@ -49,6 +49,7 @@ public class Piece {
     }
 
     /**
+     * // 本方法已被修改
      * 判断两个Piece上的图片是否相同
      *
      * @param otherPieceImage 另外的一个Piece对象

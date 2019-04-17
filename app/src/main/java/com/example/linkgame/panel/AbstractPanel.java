@@ -33,6 +33,7 @@ public abstract class AbstractPanel {
         List<Piece> notNullPieces = createPieces(config, pieces);
         // 根据非空Piece对象的集合的大小来取图片集合
         List<PieceImage> playImages = ImageUtil.getPlayImages(notNullPieces.size());
+//        List<PieceImage> playImages = ImageUtil.getPlayImages();
         // 所有图片的宽、高都是相同的
         int imageWidth = GameConf.PIECE_WIDTH;
         int imageHeight = GameConf.PIECE_HEIGHT;
