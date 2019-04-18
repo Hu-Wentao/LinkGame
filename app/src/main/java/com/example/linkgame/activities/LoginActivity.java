@@ -3,97 +3,52 @@ package com.example.linkgame.activities;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.linkgame.R;
 import com.example.linkgame.db.DbContract;
+import com.example.linkgame.db.SharedData;
+import com.example.linkgame.db.UserDbHelper;
+import com.example.linkgame.utils.MyApplication;
+import com.example.linkgame.utils.ToastUtil;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    AppCompatSpinner mClazzSpinner;
     TextView mTitleView;
     TextView mRegisterTipView;
     View mRegisterView;
     View mLoginSwitchView;
 
     EditText mRegisterUserNameView;
-    EditText mRegisterNameView;
-    EditText mRegisterNumberView;
     EditText mRegisterPasswordView;
+    RelativeLayout mLoginPwdLayoutView;
 
     EditText mLoginUserNameView;
     EditText mLoginPasswordView;
 
+    Button mLoginButton;
 
-    private boolean isStudentLogin = true;
+
+    private boolean isVisitorLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        mRegisterView = findViewById(R.id.lt_register);
-        mLoginSwitchView = findViewById(R.id.fab_switch);
-
-        mTitleView = findViewById(R.id.tv_title);
-        mRegisterTipView = findViewById(R.id.tv_register_tip);
-
-        mLoginUserNameView = findViewById(R.id.et_username_1);
-        mLoginPasswordView = findViewById(R.id.et_password_1);
-
-        mRegisterUserNameView = findViewById(R.id.et_username_2);
-        mRegisterNameView = findViewById(R.id.et_real_name);
-        mRegisterNumberView = findViewById(R.id.et_number);
-        mRegisterPasswordView = findViewById(R.id.et_password_2);
-
-        mClazzSpinner = findViewById(R.id.sp_clazz);
-
-        mLoginSwitchView.setOnClickListener(this);
-        mRegisterTipView.setOnClickListener(this);
-        findViewById(R.id.bt_login).setOnClickListener(this);
-        findViewById(R.id.bt_register).setOnClickListener(this);
-        findViewById(R.id.fab_close).setOnClickListener(this);
-
-
-//        mDataManager = new TeacherDataManager(this) {
-//            @Override
-//            public void onDataLoaded(String key, List<BmobTeacher> data) {
-//                if (data != null && !data.isEmpty()) {
-//                    ArrayAdapter<BmobTeacher> adapter = new ArrayAdapter<BmobTeacher>(LoginActivity.this, R.layout.simple_spinner_item, data){
-//                        @NonNull
-//                        @Override
-//                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//                            TextView textView = (TextView) super.getView(position, convertView, parent);
-//                            BmobTeacher teacher = getItem(position);
-//                            textView.setText(String.format(Locale.getDefault(), "%s-%s", teacher.getClazz(), teacher.getName()));
-//                            return textView;
-//                        }
-//
-//                        @Override
-//                        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//                            TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
-//                            BmobTeacher teacher = getItem(position);
-//                            textView.setText(String.format(Locale.getDefault(), "%s-%s", teacher.getClazz(), teacher.getName()));
-//                            return textView;
-//                        }
-//                    };
-//                    adapter.setDropDownViewResource(android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item);
-//                    mClazzSpinner.setAdapter(adapter);
-//                }
-//            }
-//        };
-
-//        mDataManager.loadAllTeachers();
+        initView();
     }
 
 
@@ -119,13 +74,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void switchLoginView() {
-        mTitleView.setText(isStudentLogin ? "老师登录" : "学生登录");
+        isVisitorLogin = !isVisitorLogin;
+        mTitleView.setText(isVisitorLogin ? "游客登录" : "用户登录");
 
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(mRegisterTipView, "alpha", isStudentLogin ? 1F : 0F, isStudentLogin ? 0F : 1F);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(mRegisterTipView, "alpha", isVisitorLogin ? 1F : 0F, isVisitorLogin ? 0F : 1F);
         alpha.setDuration(500L);
         alpha.start();
 
-        isStudentLogin = !isStudentLogin;
+        if (isVisitorLogin) {
+            //游客登录无需密码
+            mLoginPasswordView.setVisibility(View.GONE);
+            mLoginPasswordView.setVisibility(View.GONE);
+            mLoginButton.setText("直接进入");
+        } else {
+            mLoginPasswordView.setVisibility(View.VISIBLE);
+            mLoginPasswordView.setVisibility(View.VISIBLE);
+            mLoginButton.setText("登录");
+        }
+
+
     }
 
     public void toggleRegisterView(boolean isOpen) {
@@ -141,6 +108,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         set.start();
     }
 
+    /**
+     * 登录
+     */
     public void login() {
         mLoginUserNameView.setError(null);
         mLoginPasswordView.setError(null);
@@ -151,50 +121,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(username)){
             mLoginUserNameView.setError("用户名不能为空");
             focusView = mLoginUserNameView;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(password)) {
+
+        if (TextUtils.isEmpty(password) && !isVisitorLogin) {
             mLoginPasswordView.setError("密码不能为空");
             focusView = mLoginPasswordView;
             cancel = true;
         }
 
+        System.out.println("当前cancel:" + cancel + "isVisitorLogin: " + isVisitorLogin); //todo
+
         if (cancel) {
             focusView.requestFocus();
         } else {
-            final ProgressDialog dialog = ProgressDialog.show(this, null, "正在登录...", true, false);
-//            BmobUserHelper.get().login(username, password, isStudentLogin, new IBmoLogin.Callback() {
-//                @Override
-//                public void onSuccess(MyUser user) {
-//                    dialog.dismiss();
-//                    toast("登录成功");
-//                    startActivity(new Intent(LoginActivity.this, isStudentLogin ? StudentActivity.class : TeacherActivity.class));
-//                    finish();
-//                }
-//
-//                @Override
-//                public void onFailed(String message) {
-//                    dialog.dismiss();
-//                    toast(message);
-//                }
-//            });
+            // 如果是访客登录, 则直接开始
+            if (isVisitorLogin || check(username, password)) {
+                SharedData.setCurrentAccount(username);
+                startActivity(new Intent(this, MainActivity.class));
+            }
         }
 
     }
 
+    /**
+     * 注册
+     */
     public void register() {
         mRegisterUserNameView.setError(null);
-        mRegisterNameView.setError(null);
-        mRegisterNumberView.setError(null);
         mRegisterPasswordView.setError(null);
 
         String username = mRegisterUserNameView.getText().toString();
-        String realname = mRegisterNameView.getText().toString();
-        String number = mRegisterNumberView.getText().toString();
         String password = mRegisterPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -206,17 +167,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(realname)) {
-            mRegisterNameView.setError("姓名不能为空");
-            focusView = mRegisterNameView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(number)) {
-            mRegisterNumberView.setError("学号不能为空");
-            focusView = mRegisterNumberView;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(password)) {
             mRegisterPasswordView.setError("密码不能为空");
@@ -224,55 +174,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             cancel = true;
         }
 
-//        BmobTeacher teacher = (BmobTeacher) mClazzSpinner.getSelectedItem();
-//        if(teacher == null){
-//            toast("请选择所在班级");
-//            return;
-//        }
 
         if (cancel) {
             focusView.requestFocus();
         } else {
-            final ProgressDialog dialog = ProgressDialog.show(this, null, "正在注册...", true, false);
-//            BmobUserHelper.get().studentRegister(username, password, realname, number, teacher, new IBmoLogin.Callback() {
-//                @Override
-//                public void onSuccess(MyUser user) {
-//                    dialog.dismiss();
-//                    toast("注册成功，已自动登录");
-//                    startActivity(new Intent(LoginActivity.this, StudentActivity.class));
-//                    finish();
-//                }
-//
-//                @Override
-//                public void onFailed(String message) {
-//                    dialog.dismiss();
-//                    toast(message);
-//                }
-//            });
-
+            addNewUser(username, password);
+            SharedData.setCurrentAccount(username);
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
-    private SQLiteDatabase mDb;
-    private boolean check(String userAccount, String pwd){
+    //----------数据库操作
+    private SQLiteDatabase mReadableDb = new UserDbHelper(MyApplication.getContext()).getReadableDatabase();
+    private SQLiteDatabase mWritableDb = new UserDbHelper(MyApplication.getContext()).getWritableDatabase();
+
+    /**
+     * 检测用户名密码是否正确
+     *
+     * @param userAccount 用户名
+     * @param pwd         密码
+     * @return 是否登录
+     */
+    private boolean check(String userAccount, String pwd) {
         // 创建一个指针
-        Cursor cursor = mDb.query(DbContract.UserEntry.TABLE_NAME,
+        Cursor cursor = mReadableDb.query(DbContract.UserEntry.TABLE_NAME,
                 new String[]{DbContract.UserEntry.COLUMN_USER_PWD},
-                DbContract.UserEntry.COLUMN_USER_ACCOUNT+"=?",
+                DbContract.UserEntry.COLUMN_USER_ACCOUNT + "=?",
                 new String[]{userAccount},
                 null,
                 null,
                 DbContract.UserEntry._ID
         );
         // 如果没有找到匹配的用户名
-        if(cursor.getCount() == 0){
+        if (cursor.getCount() == 0) {
             Toast.makeText(this, "没有此用户名, 请先注册", Toast.LENGTH_SHORT).show();
             cursor.close();
             return false;
         }
-        while (cursor.moveToNext()){
-            if(cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PWD)).equals(pwd)){
+        while (cursor.moveToNext()) {
+            if (cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PWD)).equals(pwd)) {
                 cursor.close(); // 查询完毕 及时释放资源
+                Toast.makeText(this, "登录成功!", Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
@@ -281,9 +223,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return false;
     }
 
+    /**
+     * 将新注册的用户信息写入数据库
+     */
+    private long addNewUser(String userAccount, String pwd) {
+        ContentValues cv = new ContentValues();
+        cv.put(DbContract.UserEntry.COLUMN_USER_ACCOUNT, userAccount);
+        cv.put(DbContract.UserEntry.COLUMN_USER_PWD, pwd);
+        return mWritableDb.insert(DbContract.UserEntry.TABLE_NAME, null, cv);
+    }
+
     @Override
     protected void onDestroy() {
 //        mDataManager.cancelLoading();
         super.onDestroy();
+    }
+
+    private void initView() {
+        setContentView(R.layout.activity_login);
+
+        mRegisterView = findViewById(R.id.lt_register);
+        mLoginSwitchView = findViewById(R.id.fab_switch);
+
+        mTitleView = findViewById(R.id.tv_title);
+        mRegisterTipView = findViewById(R.id.tv_register_tip);
+
+        mLoginUserNameView = findViewById(R.id.et_username_1);
+        mLoginPasswordView = findViewById(R.id.et_password_1);
+        mLoginPwdLayoutView = findViewById(R.id.layout_pwd);
+
+        mRegisterUserNameView = findViewById(R.id.et_username_2);
+        mRegisterPasswordView = findViewById(R.id.et_password_2);
+
+        mLoginButton = findViewById(R.id.bt_login);
+
+        mLoginSwitchView.setOnClickListener(this);
+        mRegisterTipView.setOnClickListener(this);
+        mLoginButton.setOnClickListener(this);
+        findViewById(R.id.bt_register).setOnClickListener(this);
+        findViewById(R.id.fab_close).setOnClickListener(this);
     }
 }

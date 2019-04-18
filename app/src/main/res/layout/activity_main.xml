@@ -8,7 +8,7 @@
     <!--android:background="@drawable/img_game_bg">-->
 
     <!--水平排列的LinearLayout -->
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/controlPanel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,35 +26,44 @@
             android:id="@+id/timeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="剩余时间: 60"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
-            tools:text="剩余时间:60" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/startButton"
-            android:layout_width="wrap_content"
+            android:layout_width="88dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="2dp"
 
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="4dp"
             android:layout_weight="1"
             android:background="@drawable/shape_radius"
-
             android:backgroundTint="@color/colorPrimary"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:text="开始游戏"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/timeText"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <!-- 游戏主界面的自定义组件 -->
     <com.example.linkgame.View.GameView

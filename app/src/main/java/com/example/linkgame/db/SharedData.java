@@ -39,11 +39,12 @@ public class SharedData {
 
     /**
      * 设置当前的用户名, (如果用户成功登陆的话)
+     * 如果 userAccount == null 表示注销当前用户
      */
     public static boolean setCurrentAccount(String userAccount) {
         SharedPreferences sharePreference = MyApplication.getContext().getApplicationContext().getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
 
-        setLoggingStatus(true);
+        setLoggingStatus(userAccount != null);
         return sharePreference.edit()
                 .putString(CURRENT_ACCOUNT, userAccount)
                 .commit();

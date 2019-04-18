@@ -4,22 +4,28 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
+import com.example.linkgame.BuildConfig;
+import com.example.linkgame.db.SharedData;
 import com.example.linkgame.utils.BaseHandlerCallBack;
 import com.example.linkgame.R;
 import com.example.linkgame.View.GameView;
@@ -99,6 +105,11 @@ public class MainActivity extends Activity implements BaseHandlerCallBack {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         handler = new NoLeakHandler(this);
+
+        // 如果没有登录
+        if (!SharedData.getLoggingStatus()) {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
         // 初始化界面
         init();
     }
@@ -169,7 +180,7 @@ public class MainActivity extends Activity implements BaseHandlerCallBack {
 
     /**
      * getWidth()和getHeight()，只有在View布局完成之后才会有值
-     *
+     * <p>
      * 当Activity的焦点发生改变时调用，onWindowFocusChanged()会在onResume（）方法执行之后调用，
      * Activity的生命周期方法与 View的绘制流程方法的执行顺序到底是怎样的呢？
      * onCreate()→onResume()→onMeasure()→onLayout()→onWindowFocusChanged()→.....→onDraw()...
@@ -353,14 +364,17 @@ public class MainActivity extends Activity implements BaseHandlerCallBack {
      */
     private void stopTimer() {
         // 停止定时器
-        this.timer.cancel();
-        this.timer = null;
+        if (this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
+        }
     }
 
     @Override
     public void callBack(Message msg) {
         switch (msg.what) {
             case MESSAGE_ID:
+                timeTextView.setVisibility(View.VISIBLE);
                 timeTextView.setText(String.format(getString(R.string.remaining_time), gameTime));
                 gameTime--; // 游戏剩余时间减少
                 // 时间小于0, 游戏失败
@@ -378,6 +392,28 @@ public class MainActivity extends Activity implements BaseHandlerCallBack {
                 break;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                SharedData.setCurrentAccount(null);
+                Toast.makeText(this, "账号退出成功!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, LoginActivity.class));
+                this.finish();
+                return true;
+            default:
+                if (BuildConfig.DEBUG) Log.d("swR+MainActivity", "未处理的点击事件...");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private static class NoLeakHandler<T extends BaseHandlerCallBack> extends Handler {
         private WeakReference<T> wr;
