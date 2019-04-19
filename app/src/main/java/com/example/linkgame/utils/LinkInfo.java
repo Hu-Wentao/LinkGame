@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import com.example.linkgame.View.Piece;
 import com.example.linkgame.game.GameService;
+import com.example.linkgame.game.impl.GameServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class LinkInfo {
      * @param gameService
      * @return
      */
-    public List<Point> getLinkPoints(GameService gameService, float parentWidth, float parentHeight) {
+    public List<Point> getLinkPoints(GameServiceImpl gameService, float parentWidth, float parentHeight) {
         List<Point> list = new ArrayList<>();
         Piece[][] pieceArr = gameService.getPieceArr();
         for (int i = 0; i < points.size(); i++) {

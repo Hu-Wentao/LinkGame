@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.example.linkgame.game.GameService;
+import com.example.linkgame.game.impl.GameServiceImpl;
 import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkInfo;
 
@@ -21,7 +22,7 @@ public class GameView extends View {
     /**
      * 游戏逻辑的实现类
      */
-    private GameService gameService;
+    private GameServiceImpl gameService;
     /**
      * 保存当前已经被选中的方块
      */
@@ -79,7 +80,7 @@ public class GameView extends View {
      *
      * @param gameService
      */
-    public void setGameService(GameService gameService) {
+    public void setGameService(GameServiceImpl gameService) {
         this.gameService = gameService;
     }
 

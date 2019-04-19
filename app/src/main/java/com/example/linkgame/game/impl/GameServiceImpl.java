@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 游戏逻辑的实现类
  */
-public class GameServiceImpl implements GameService {
+public class GameServiceImpl {
     /**
      * 定义一个Piece[][]数组, 存放的是当前所显示的 图片
      * 使用 getPiecesArr() 来获取
@@ -39,7 +39,6 @@ public class GameServiceImpl implements GameService {
         this.config = config;
     }
 
-    @Override
     public void start() {
         // 定义一个AbstractPanel对象
         AbstractPanel board;
@@ -69,12 +68,10 @@ public class GameServiceImpl implements GameService {
         this.piecesArr = board.create(config);
     }
 
-    @Override
     public Piece[][] getPieceArr() {
         return this.piecesArr;
     }
 
-    @Override
     public boolean hasPieces() {
         // 遍历Piece[][]数组的每个元素
         for (int i = 0; i < piecesArr.length; i++) {
@@ -95,7 +92,6 @@ public class GameServiceImpl implements GameService {
      * @param touchY 鼠标点击的y座标
      * @return
      */
-    @Override
     public Piece findPiece(float touchX, float touchY) {
         int[] arr = findPieceIndex(touchX, touchY);
         if (arr == null) {
@@ -185,7 +181,6 @@ public class GameServiceImpl implements GameService {
      * @param p2 第二个Piece对象
      * @return
      */
-    @Override
     public LinkInfo link(Piece p1, Piece p2) {
         // 两个Piece是同一个, 即选中了同一个方块, 返回null
         if (p1.equals(p2)) {

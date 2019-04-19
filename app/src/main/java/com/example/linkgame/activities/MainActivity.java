@@ -50,7 +50,7 @@ public class MainActivity extends Activity implements BaseHandlerCallBack {
     /**
      * 游戏业务逻辑接口
      */
-    public GameService gameService;
+    public GameServiceImpl gameService;
     /**
      * 游戏界面
      */

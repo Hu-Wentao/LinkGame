@@ -49,14 +49,14 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
     //-初始化数据------------------------------------------
-    // todo 此处待优化 GameConfig类
-    // 适配不同的屏幕，dp转为px
-    int beginImageX = SizeUtils.dp2Px(GameConf.BEGIN_IMAGE_X);
-    int beginImageY = SizeUtils.dp2Px(GameConf.BEGIN_IMAGE_Y);
-    private GameConf config = new GameConf(GameConf.PIECE_X_SUM, GameConf.PIECE_Y_SUM, beginImageX, beginImageY, GameConf.DEFAULT_TIME);
-    private GameService gameService = new GameServiceImpl(config);
+//    // todo 此处待优化 GameConfig类
+//    // 适配不同的屏幕，dp转为px
+//    int beginImageX = SizeUtils.dp2Px(GameConf.BEGIN_IMAGE_X);
+//    int beginImageY = SizeUtils.dp2Px(GameConf.BEGIN_IMAGE_Y);
+//    private GameConf config = new GameConf(GameConf.PIECE_X_SUM, GameConf.PIECE_Y_SUM, beginImageX, beginImageY, GameConf.DEFAULT_TIME);
+//    private GameService gameService = new GameServiceImpl(config);
 
-
+    // 初始化要加载的数据
     private void initData() {
 
     }
@@ -64,7 +64,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     //-初始化控件------------------------------------------
     private GridLayout mGridLayout;
-    private TextView mCountdownTextView;
+    private TextView mCountdownTextView;    // todo 倒计时时需要修改
     private ImageView mPauseOrPlayImageView;
 
 

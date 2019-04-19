@@ -59,10 +59,6 @@ public class GameConf {
      * 记录游戏的总时间, 单位是秒
      */
     private long gameTime;
-    /**
-     * 应用上下文
-     */
-    private Context context;
 
     /**
      * 提供一个参数构造器
@@ -80,7 +76,6 @@ public class GameConf {
         this.beginImageX = beginImageX;
         this.beginImageY = beginImageY;
         this.gameTime = gameTime;
-        this.context = context;
     }
 
     /**
