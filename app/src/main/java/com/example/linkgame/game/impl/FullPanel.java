@@ -1,7 +1,7 @@
-package com.example.linkgame.panel.impl;
+package com.example.linkgame.game.impl;
 
 import com.example.linkgame.View.Piece;
-import com.example.linkgame.panel.AbstractPanel;
+import com.example.linkgame.game.AbstractPanel;
 import com.example.linkgame.utils.GameConf;
 
 import java.util.ArrayList;

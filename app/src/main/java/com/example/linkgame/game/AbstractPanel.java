@@ -1,4 +1,4 @@
-package com.example.linkgame.panel;
+package com.example.linkgame.game;
 
 import com.example.linkgame.View.Piece;
 import com.example.linkgame.View.PieceImage;

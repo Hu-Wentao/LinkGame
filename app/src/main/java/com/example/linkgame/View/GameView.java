@@ -5,15 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.linkgame.panel.GameService;
+import com.example.linkgame.game.GameService;
 import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkInfo;
-
-import java.util.List;
 
 
 /**

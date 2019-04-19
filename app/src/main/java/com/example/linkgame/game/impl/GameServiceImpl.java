@@ -1,10 +1,10 @@
-package com.example.linkgame.panel.impl;
+package com.example.linkgame.game.impl;
 
 import android.graphics.Point;
 
 import com.example.linkgame.View.Piece;
-import com.example.linkgame.panel.AbstractPanel;
-import com.example.linkgame.panel.GameService;
+import com.example.linkgame.game.AbstractPanel;
+import com.example.linkgame.game.GameService;
 import com.example.linkgame.utils.GameConf;
 import com.example.linkgame.utils.LinkInfo;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 游戏逻辑的实现类
  */
-public class NewGameServiceImpl implements GameService {
+public class GameServiceImpl implements GameService {
     /**
      * 定义一个Piece[][]数组, 存放的是当前所显示的 图片
      * 使用 getPiecesArr() 来获取
@@ -34,7 +34,7 @@ public class NewGameServiceImpl implements GameService {
      *
      * @param config 游戏配置对象
      */
-    public NewGameServiceImpl(GameConf config) {
+    public GameServiceImpl(GameConf config) {
         // 将游戏的配置对象设置本类中
         this.config = config;
     }

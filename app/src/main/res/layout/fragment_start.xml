@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img_background">
+
+    <Button
+        android:id="@+id/btn_mainGame"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_radius"
+        android:backgroundTint="@color/btnColor"
+        android:text="开始游戏"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_rank"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_radius"
+        android:backgroundTint="@color/btnColor"
+        android:text="排行榜"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="@+id/btn_mainGame"
+        app:layout_constraintStart_toStartOf="@+id/btn_mainGame"
+        app:layout_constraintTop_toBottomOf="@+id/btn_mainGame" />
+
+    <Button
+        android:id="@+id/btn_setting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_radius"
+        android:backgroundTint="@color/btnColor"
+        android:text="设置"
+        android:textColor="#ffffff"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/btn_mainGame"
+        app:layout_constraintStart_toStartOf="@+id/btn_mainGame"
+        app:layout_constraintTop_toBottomOf="@+id/btn_rank" />
+</android.support.constraint.ConstraintLayout>

@@ -30,8 +30,8 @@ import com.example.linkgame.utils.BaseHandlerCallBack;
 import com.example.linkgame.R;
 import com.example.linkgame.View.GameView;
 import com.example.linkgame.View.Piece;
-import com.example.linkgame.panel.GameService;
-import com.example.linkgame.panel.impl.NewGameServiceImpl;
+import com.example.linkgame.game.GameService;
+import com.example.linkgame.game.impl.GameServiceImpl;
 import com.example.linkgame.utils.GameConf;
 import com.example.linkgame.utils.LinkInfo;
 import com.example.linkgame.utils.SizeUtils;
@@ -132,7 +132,7 @@ public class MainActivity extends Activity implements BaseHandlerCallBack {
         // 获取振动器
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         // 初始化游戏业务逻辑接口
-        gameService = new NewGameServiceImpl(this.config);
+        gameService = new GameServiceImpl(this.config);
 
         // 设置游戏逻辑的实现类
         gameView.setGameService(gameService);
