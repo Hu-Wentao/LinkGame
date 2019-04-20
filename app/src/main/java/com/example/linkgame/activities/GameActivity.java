@@ -12,12 +12,13 @@ import com.example.linkgame.R;
 import com.example.linkgame.fragments.GameFragment;
 import com.example.linkgame.fragments.RankFragment;
 import com.example.linkgame.fragments.StartFragment;
+import com.example.linkgame.game.Config;
 import com.example.linkgame.utils.GameConf;
 
 public class GameActivity extends AppCompatActivity {
 
     public static final int
-            MSG_WHAT_START = 0,
+            MSG_WHAT_START_NEW_GAME = 0,
             MSG_WHAT_PAUSE = 1,
             MSG_WHAT_PLAY = 2,
             MSG_WHAT_OVER = 3;
@@ -27,14 +28,16 @@ public class GameActivity extends AppCompatActivity {
             MSG_WHAT_RESTART = 13;
 
 
-    private Handler mGameHandler = new Handler(new Handler.Callback() {
+    public Handler mGameHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
-                case MSG_WHAT_START:    // 开始游戏
+                case MSG_WHAT_START_NEW_GAME:    // 开始新游戏
                     // 开始计时器
                     GameTimer.start(GameConf.DEFAULT_TIME, mGameHandler);
                     // todo 加载界面
+                    // 初始化数据,并载入网格
+                    ((GameFragment)fragmentArr[1]).loadDataToLayout(Config.GRID_COLS, Config.GRID_ROWS);
                     break;
                 case MSG_WHAT_PAUSE:    // 游戏暂停
                     // todo 在离开app 或 点击暂停按钮 时自动调用,
@@ -48,12 +51,14 @@ public class GameActivity extends AppCompatActivity {
                     break;
                 case MSG_WHAT_OVER:     // 游戏结算
                     // todo 显示结算页面
+
                     // 结束计时器
                     GameTimer.cancel();
                     break;
                 //-------------------
-                case MSG_WHAT_INTERVAL:  // 游戏定时间隔
+                case MSG_WHAT_INTERVAL:  // 游戏定时间隔(在pause 之外,每隔1s 触发一次)
                     // todo 自动刷新 TextView
+
                     break;
                 case MSG_WHAT_REFRESH:  // 用户操作导致更新
                     // todo 刷新游戏分数
@@ -116,6 +121,7 @@ public class GameActivity extends AppCompatActivity {
             timer.cancel();
         }
     }
+    //------------------------------------------------------------
 
     //------------------------------------------------------------
     private long pressBackCache;

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 
 import com.example.linkgame.R;
 import com.example.linkgame.View.PieceImage;
+import com.example.linkgame.game.Config;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,7 @@ public class ImageUtil {
 
 
     /**
+     * //todo 废弃
      * 将图片ID集合转换PieceImage对象集合，PieceImage封装了图片ID与图片本身
      *
      * @return size个PieceImage对象的集合
@@ -54,6 +56,35 @@ public class ImageUtil {
 
 
     // 为 drawableList赋值
+
+
+    /**
+     * 获取指定数量的, 随机的图片(中英对应的)
+     * <p>
+     * 与 GameService 的 sCurrentDrawableArr 直接相关
+     *
+     * @param size 必须为偶数
+     * @return 随机图数组
+     */
+    public static Drawable[] getRandomDrawableArr(int size) {
+        if (size % 2 == 0)
+            throw new IllegalArgumentException("参数必须是偶数");
+        Random r = new Random();
+        Drawable[] tmp = new Drawable[size];
+        // 从所有的图片对中随机的获取 size/2 个图片对(一共size张图)
+        for (int i = 0; i < size; i++) {
+            int t = r.nextInt(Config.ALL_IMG_NUM_PAIR);
+            tmp[i] = getAllDrawable()[(t * 2)];
+            tmp[++i] = getAllDrawable()[(t * 2 + 1)];
+        }
+        return tmp;
+    }
+
+    /**
+     * 获取目录下所有的Drawable
+     *
+     * @return Drawable[]
+     */
     private static Drawable[] getAllDrawable() {
         if (drawableArr == null) {
             drawableArr = new Drawable[GameConf.ALL_IMG_NUM * 2];
@@ -68,7 +99,7 @@ public class ImageUtil {
     }
 
 
-    /**
+    /** // todo 废弃
      * 从drawable目录中中获取size个图片资源ID(以p_为前缀的资源名称), 其中size为游戏数量
      *
      * @param size 需要获取的图片ID的数量
@@ -82,7 +113,7 @@ public class ImageUtil {
         List<Integer> playImageValues = new ArrayList<>(size);
         // 为List添加 size对 中文+英文 图, 共计size个
         Random random = new Random();
-        for (int i = 0; i < size/2; i++) {  // 此处 size/2 因为一个循环中添加了2个元素
+        for (int i = 0; i < size / 2; i++) {  // 此处 size/2 因为一个循环中添加了2个元素
             int t = random.nextInt(GameConf.ALL_IMG_NUM);
             playImageValues.add(t * 2);     // 添加一个 中文图的index
             playImageValues.add(t * 2 + 1); // 添加一个 中文图对应的英文图的index
@@ -96,7 +127,7 @@ public class ImageUtil {
 //        HashSet<Integer> playImageValues = new HashSet<>(size);
 //        Random random = new Random();
 //        while (playImageValues.size() < size) {
-//            int t = random.nextInt(GameConf.ALL_IMG_NUM);
+//            int t = random.nextInt(GameConf.ALL_IMG_NUM_PAIR);
 //            playImageValues.add(t * 2);     // 添加一个 中文图的index
 //            playImageValues.add(t * 2 + 1); // 添加一个 中文图对应的英文图的i
 //        }
@@ -104,7 +135,7 @@ public class ImageUtil {
     }
 
 
-    /**
+    /** //todo 可能废弃
      * 将Drawable转换为Bitmap
      */
     private static Bitmap drawableToBitmap(Drawable drawable) {

@@ -8,8 +8,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.linkgame.game.GameService;
-import com.example.linkgame.game.impl.GameServiceImpl;
 import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkInfo;
 

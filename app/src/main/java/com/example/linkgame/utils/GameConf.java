@@ -3,6 +3,8 @@ package com.example.linkgame.utils;
 import android.content.Context;
 
 /**
+ *  //todo 完成后请删除
+ *
  * 保存游戏配置的对象
  */
 public class GameConf {

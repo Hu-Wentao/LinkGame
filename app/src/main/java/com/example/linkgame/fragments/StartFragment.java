@@ -1,7 +1,6 @@
 package com.example.linkgame.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -42,6 +41,9 @@ public class StartFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.btn_mainGame:
                 ((GameActivity)getActivity()).changePage(1);
+                // 发送"开始游戏"
+                ((GameActivity)getActivity()).mGameHandler
+                        .sendEmptyMessage(GameActivity.MSG_WHAT_START_NEW_GAME);
                 break;
             case R.id.btn_rank:
                 ((GameActivity)getActivity()).changePage(2);

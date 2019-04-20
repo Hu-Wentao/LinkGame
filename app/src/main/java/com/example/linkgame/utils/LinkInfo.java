@@ -3,8 +3,6 @@ package com.example.linkgame.utils;
 import android.graphics.Point;
 
 import com.example.linkgame.View.Piece;
-import com.example.linkgame.game.GameService;
-import com.example.linkgame.game.impl.GameServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

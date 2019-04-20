@@ -30,8 +30,6 @@ import com.example.linkgame.utils.BaseHandlerCallBack;
 import com.example.linkgame.R;
 import com.example.linkgame.View.GameView;
 import com.example.linkgame.View.Piece;
-import com.example.linkgame.game.GameService;
-import com.example.linkgame.game.impl.GameServiceImpl;
 import com.example.linkgame.utils.GameConf;
 import com.example.linkgame.utils.LinkInfo;
 import com.example.linkgame.utils.SizeUtils;
