@@ -76,7 +76,7 @@ public class GameService {
                 removeByPicTag(picTag);
                 // 检测 sCurrentDrawableList 中是否还有元素, 如果没有,则 游戏结束
                 if (sCurrentDrawableList.isEmpty()) {
-                    // TODO: 2019/4/21 尝试使用MyApplication 来发送Handler
+                    // TODO: 2019/4/21 考虑尝试使用MyApplication 来发送Handler
                     ((GameActivity) context).mGameHandler.sendEmptyMessage(GameActivity.MSG_WHAT_OVER);
                 }
                 // 移除

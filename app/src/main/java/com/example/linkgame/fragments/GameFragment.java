@@ -29,32 +29,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     // 布局
     private View v;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_game, container, false);
-        initView(v);
-        int gameStyle = SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0);
-        loadDataToLayout(Config.GRID_ROWS, Config.GRID_COLS, gameStyle);   // 通过Activity的 hand
-        return v;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 
     //-初始化 GridLayout, ImageViewArr 数据------------------------------------------
     /**
@@ -70,37 +45,30 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * @param gameStyle 游戏模式 GameService.STYLE_
      */
     public void loadDataToLayout(int rows, int cols, int gameStyle) {
-        // 初始化数据
-        int allViewNum = cols * rows;
         mGridLayout.removeAllViews();
         // 设置layout 网格 行, 列
         mGridLayout.setRowCount(rows);
         mGridLayout.setColumnCount(cols);
-
-
         // 初始化 ImageViewArr
-        sImageViewArr = new ImageView[allViewNum];
+        sImageViewArr = new ImageView[cols * rows];
 
         System.out.println("当前布局下应当获取的随机图片张数:" + GameService.getNeedDrawableNum(SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0), rows, cols));   //todo
-
-
+        // 获取随机的图片LIst
         List<Pic> list = GameService.getCurrentDrawableList(true,
                 GameService.getNeedDrawableNum(
                         SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0),
                         rows, cols)
-        ); // 获取随机的图片LIst
+        );
 
         // 将图片设置为ImageView的 background, 然后添加进Layout
         int currentDrawableIndex = 0;
-        for (int i = 0; i < allViewNum; i++) {
+        for (int i = 0; i < rows * cols; i++) {
             // 配置参数
             GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
             layoutParams.width = 0;
             layoutParams.height = 0;
             // 创建控件
             sImageViewArr[i] = new ImageView(getContext());
-
-
             Drawable tmp;
 //            if (GameService.needSetTextImg(i, gameStyle, rows, cols) && currentDrawableIndex<list.size()) {   //如果出现错误, 可以使用本行代码查看出错后的图片排布
             if (GameService.needSetTextImg(i, gameStyle, rows, cols)) {
@@ -148,7 +116,19 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         GameService.onImageClick((int) v.getTag(R.id.imageViewIndex), (int) picTag, getContext());
     }
+    //----------------------------------------------------
 
+    /**
+     * 设定Layout 的内容
+     *
+     * @param rows      行数
+     * @param cols      列数
+     * @param list      存放的
+     */
+    private void reLayout(int rows, int cols, List<Pic> list) {
+        // todo 遍历 sImageViewArr, || List<Pic>
+
+    }
 
     //-初始化控件------------------------------------------
     private GridLayout mGridLayout;
@@ -171,6 +151,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 // 暂停与开始
                 handleGamePlayOrPause(((GameActivity) getActivity()).mGameHandler);
                 break;
+            case R.id.iv_reLayout:
+                ((GameActivity) getActivity()).mGameHandler.sendEmptyMessage(GameActivity.MSG_WHAT_RE_LAYOUT);
+                break;
             // TODO: 2019/4/21 游戏结算页
             default:
                 if (BuildConfig.DEBUG) Log.d("swR+GameFragment", "未处理的点击事件...");
@@ -189,6 +172,33 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 (isGamePause ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause));
     }
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        v = inflater.inflate(R.layout.fragment_game, container, false);
+        initView(v);
+        int gameStyle = SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0);
+        loadDataToLayout(Config.GRID_ROWS, Config.GRID_COLS, gameStyle);   // 通过Activity的 hand
+        return v;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
     @Override
     public void onPause() {

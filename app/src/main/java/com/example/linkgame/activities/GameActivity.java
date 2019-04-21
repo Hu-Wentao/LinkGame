@@ -6,10 +6,8 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 import com.example.linkgame.db.SharedData;
 import com.example.linkgame.fragments.GameFragment;
@@ -27,7 +25,7 @@ public class GameActivity extends AppCompatActivity {
     public static final int
             MSG_WHAT_REFRESH = 11,
             MSG_WHAT_INTERVAL = 12,
-            MSG_WHAT_RESTART = 13;
+            MSG_WHAT_RE_LAYOUT = 13;
     public static final int
             MSG_WHAT_SHOW_INDEX_LINK = 21,
             MSG_WHAT_HIDE_INDEX_LINK = 22;
@@ -72,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
                     // todo 刷新游戏分数
                     // todo 刷新界面
                     break;
-                case MSG_WHAT_RESTART:  // 游戏手动重启(当游戏无法进行下去的时候)
+                case MSG_WHAT_RE_LAYOUT:  // 游戏手动重启(当游戏无法进行下去的时候)
                     // todo 保存当前游戏内剩余的中英文图, 重新放置它们的位置
 
                     break;
