@@ -8,9 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +22,6 @@ import com.example.linkgame.db.DbContract;
 import com.example.linkgame.db.SharedData;
 import com.example.linkgame.db.UserDbHelper;
 import com.example.linkgame.utils.MyApplication;
-import com.example.linkgame.utils.ToastUtil;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -142,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // 如果是访客登录, 则直接开始
             if (isVisitorLogin || check(username, password)) {
                 SharedData.setCurrentAccount(username);
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, GameActivity.class));
             }
         }
 
@@ -180,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             addNewUser(username, password);
             SharedData.setCurrentAccount(username);
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, GameActivity.class));
         }
     }
 

@@ -8,12 +8,12 @@
     android:background="@drawable/img_background">
 
     <Button
-        android:id="@+id/btn_mainGame"
+        android:id="@+id/btn_gameType1"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_radius"
         android:backgroundTint="@color/btnColor"
-        android:text="开始游戏"
+        android:text="普通模式"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,9 +29,24 @@
         android:backgroundTint="@color/btnColor"
         android:text="排行榜"
         android:textColor="#ffffff"
-        app:layout_constraintEnd_toEndOf="@+id/btn_mainGame"
-        app:layout_constraintStart_toStartOf="@+id/btn_mainGame"
-        app:layout_constraintTop_toBottomOf="@+id/btn_mainGame" />
+        app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_gameType1"
+        app:layout_constraintTop_toBottomOf="@+id/btn_gameType2" />
+
+    <Button
+        android:id="@+id/btn_gameType2"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_radius"
+        android:backgroundTint="@color/btnColor"
+        android:text="困难模式"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_gameType1"
+        app:layout_constraintTop_toBottomOf="@+id/btn_gameType1" />
 
     <Button
         android:id="@+id/btn_setting"
@@ -43,7 +58,7 @@
         android:text="设置"
         android:textColor="#ffffff"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/btn_mainGame"
-        app:layout_constraintStart_toStartOf="@+id/btn_mainGame"
+        app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
+        app:layout_constraintStart_toStartOf="@+id/btn_gameType1"
         app:layout_constraintTop_toBottomOf="@+id/btn_rank" />
 </android.support.constraint.ConstraintLayout>

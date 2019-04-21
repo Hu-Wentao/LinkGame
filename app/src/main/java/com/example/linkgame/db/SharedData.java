@@ -11,19 +11,38 @@ import com.example.linkgame.utils.MyApplication;
  */
 public class SharedData {
     // 应用常量
-    public static final String USER_INFO = "user_info"; // 作为SharedPreference的文件名
+    public static final String USER_INFO = "user_info";             // 作为SharedPreference的文件名
     public static final String CURRENT_ACCOUNT = "current_account"; // 当前用户名的 key
-    public static final String LOGIN_STATUS = "login_Status";   // 是否登录的key
+    public static final String LOGIN_STATUS = "login_Status";       // 是否登录的key
+    public static final String CURRENT_GAME_TYPE = "current_game_type"; // 当前游戏类型
+    //----------------------------------
+    private static final String APP_DATE = "appDate";
+    private static SharedPreferences preferences;
+
+    private static synchronized SharedPreferences getPreferences() {
+        if (preferences == null)
+            preferences = MyApplication.getContext().getSharedPreferences(APP_DATE, Context.MODE_PRIVATE);
+        return preferences;
+    }
 
 
-    public static boolean setLoggingStatus(boolean b) {
+    public static void setInt(String key, int val) {
+        getPreferences().edit().putInt(key, val).apply();
+    }
+
+    public static int getInt(String key, int defaultVal) {
+        return getPreferences().getInt(key, defaultVal);
+    }
+
+
+    private static boolean setLoggingStatus(boolean b) {
         SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
         return sharedPreferences.edit()
                 .putBoolean(LOGIN_STATUS, b)
                 .commit();
     }
 
-    public static boolean getLoggingStatus() {
+    private static boolean getLoggingStatus() {
         SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
         if (sharedPreferences.getBoolean(LOGIN_STATUS, false)) {  // 默认为未登录
             if (getCurrentAccount() == null) { // 如果返回已登录, 但是当前账户为null, 则仍为 未登录
