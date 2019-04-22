@@ -15,12 +15,16 @@ import com.example.linkgame.fragments.RankFragment;
 import com.example.linkgame.fragments.StartFragment;
 import com.example.linkgame.game.Config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class GameActivity extends AppCompatActivity {
 
     public static final int
             MSG_WHAT_START_NEW_GAME = 0,
-            MSG_WHAT_PAUSE = 1,
-            MSG_WHAT_PLAY = 2,
+            MSG_WHAT_PAUSE_OR_PLAY = 1,
+//            MSG_WHAT_PLAY = 2,
             MSG_WHAT_OVER = 3;
     public static final int
             MSG_WHAT_REFRESH = 11,
@@ -42,17 +46,24 @@ public class GameActivity extends AppCompatActivity {
                     // 开始计时器
                     GameTimer.start(Config.GAME_TIME, mGameHandler);
                     break;
-                case MSG_WHAT_PAUSE:    // 游戏暂停
-                    // todo 在离开app 或 点击暂停按钮 时自动调用,
+                case MSG_WHAT_PAUSE_OR_PLAY:    // 游戏暂停 或 继续
+                    // 在离开app 或 点击暂停按钮 时自动调用,
+                    boolean setPause = msg.arg1 == 1;
+                    GameFragment f = (GameFragment) msg.obj;
+                    if (setPause) {
+                        GameTimer.pause();  // 暂停计时器
+                    } else {
+                        GameTimer.play(mGameHandler);
+                    }
+                    f.handlePlayOrPauseBtn(setPause);
 
-                    // 暂停计时器
-                    GameTimer.pause();
                     break;
-                case MSG_WHAT_PLAY:     // 游戏继续
-                    //todo 点击开始按钮时调用
-                    // 继续计时器
-                    GameTimer.play(mGameHandler);
-                    break;
+//                case MSG_WHAT_PLAY:     // 游戏继续
+//                    // 点击开始按钮时调用
+//                    //  取消暂停状态
+//                    // 继续计时器
+//                    GameTimer.play(mGameHandler);
+//                    break;
                 case MSG_WHAT_OVER:     // 游戏结算
                     int score = GameTimer.getRemainTime();
                     // todo 显示结算页面
@@ -69,13 +80,16 @@ public class GameActivity extends AppCompatActivity {
                 case MSG_WHAT_REFRESH:  // 用户操作导致更新
                     // todo 刷新游戏分数
                     // todo 刷新界面
+
                     break;
                 case MSG_WHAT_RE_LAYOUT:  // 游戏手动重启(当游戏无法进行下去的时候)
-                    // todo 保存当前游戏内剩余的中英文图, 重新放置它们的位置
-
+                    // 获取当前游戏内剩余的中英文图, 重新放置它们的位置
+                    ((GameFragment) msg.obj).reLayout();
                     break;
                 //--------------
                 case MSG_WHAT_SHOW_INDEX_LINK:
+                    List indexList = (ArrayList)msg.obj;
+                    System.out.println(Arrays.toString(indexList.toArray()));   //todo
                     // todo 调用GameFragment 中的相应方法
                     break;
                 case MSG_WHAT_HIDE_INDEX_LINK:
@@ -112,7 +126,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         public static int getRemainTime() {
-            return (int)(saveMillisUntilFinished/1000);
+            return (int) (saveMillisUntilFinished / 1000);
         }
 
         // 开始
@@ -148,11 +162,12 @@ public class GameActivity extends AppCompatActivity {
         }
     }
     //------------------------------------------------------------
+
     /**
      * @param remainTime 当前游戏还剩多长时间
      */
     public void handleCountDownText(int remainTime) {
-        ((GameFragment)fragmentArr[1]).mCountdownTextView.setText(("剩余: " + remainTime + "秒"));
+        ((GameFragment) fragmentArr[1]).mCountdownTextView.setText(("剩余: " + remainTime + "秒"));
     }
 
     //------------------------------------------------------------
@@ -167,6 +182,7 @@ public class GameActivity extends AppCompatActivity {
         initPage();
         changePage(0);
     }
+
     private void initPage() {
         fragmentArr = new Fragment[]{new StartFragment(),
                 new GameFragment(),

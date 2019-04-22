@@ -3,6 +3,7 @@ package com.example.linkgame.game;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.os.Message;
 
 import com.example.linkgame.R;
@@ -12,6 +13,7 @@ import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +39,7 @@ public class GameService {
      * @param viewIndex ImageView 在数组中的位置
      * @param picTag    如果不为-1, 则表示 文字图片资源 的后缀
      */
-    public static void onImageClick(int viewIndex, int picTag, Context context) {
+    public static void onImageClick(int viewIndex, int picTag, Handler handler) {
         // 如果被点击的view 没有textTag, 则 取消已经被选中的view
         if (picTag == -1) {
             setSelectedView(-1);
@@ -55,14 +57,17 @@ public class GameService {
             } else {
                 // 两个view可以进行连接
                 int savedTag = picTag + (picTag % 2 == 0 ? 1 : -1);
+
+                System.out.println("GameService :"+Arrays.toString(indexLink.toArray()));   //todo
                 if (indexLink.size() > 2) {
                     // 发送 Message 显示连接线 (如果 indexLink 长度等于2, 则不发送)
-                    Message.obtain(((GameActivity) context).mGameHandler, GameActivity.MSG_WHAT_SHOW_INDEX_LINK, indexLink).sendToTarget();
+                    System.out.println("发送了显示路径的消息");   //todo
+                    Message.obtain(handler, GameActivity.MSG_WHAT_SHOW_INDEX_LINK, indexLink).sendToTarget();
                     // 发送 延迟Message 清除连接线(可以在此播放音效)
                     Message m = Message.obtain();
                     m.what = GameActivity.MSG_WHAT_HIDE_INDEX_LINK;
                     m.obj = indexLink;
-                    ((GameActivity) context).mGameHandler.sendMessageDelayed(m, 300);
+                    handler.sendMessageDelayed(m, 300);
                 }
                 // 将savedViewIndex ,viewIndex 的图,tag 都设为空
                 GameFragment.sImageViewArr[savedViewIndex].setBackground(new ColorDrawable(0xFFFFFF));
@@ -76,8 +81,7 @@ public class GameService {
                 removeByPicTag(picTag);
                 // 检测 sCurrentDrawableList 中是否还有元素, 如果没有,则 游戏结束
                 if (sCurrentDrawableList.isEmpty()) {
-                    // TODO: 2019/4/21 考虑尝试使用MyApplication 来发送Handler
-                    ((GameActivity) context).mGameHandler.sendEmptyMessage(GameActivity.MSG_WHAT_OVER);
+                    handler.sendEmptyMessage(GameActivity.MSG_WHAT_OVER);
                 }
                 // 移除
                 GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
@@ -185,14 +189,14 @@ public class GameService {
     /**
      * 获取当前正在显示的 文字图片, 如果当前没有, 则自动生成随机的
      *
-     * @param isRefresh   是否刷新当前已保存的数组
-     * @param defaultSize 如果isRefresh == true 或者当前没有正在显示的图片数组的话,
+     * @param defaultSize 是否刷新当前已保存的数组( 应当在重新开始一局游戏 的时候 指定一个值 否则应当输入 -1, 以获取当前的 list)
+     *                    如果isRefresh == true 或者当前没有正在显示的图片数组的话,
      *                    则自动产生 defaultSize个元素
      *                    图片数量(必须是偶数)(已在内部方法中完成检验步骤)
      * @return Drawable数组
      */
-    public static ArrayList<Pic> getCurrentDrawableList(boolean isRefresh, int defaultSize) {
-        if (sCurrentDrawableList == null || isRefresh) {
+    public static ArrayList<Pic> getCurrentDrawableList(int defaultSize) {
+        if (sCurrentDrawableList == null || defaultSize != -1) {
             sCurrentDrawableList = new ArrayList<>();
             Collections.addAll(sCurrentDrawableList, ImageUtil.getRandomDrawableArr(defaultSize));  // 将数组全部添加到
             Collections.shuffle(sCurrentDrawableList);  // 打乱图片顺序

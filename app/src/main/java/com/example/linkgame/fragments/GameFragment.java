@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
@@ -21,14 +22,17 @@ import com.example.linkgame.game.Config;
 import com.example.linkgame.game.Pic;
 import com.example.linkgame.game.GameService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameFragment extends Fragment implements View.OnClickListener {
     // 处理游戏暂停还是继续
     private boolean isGamePause = false;
     // 布局
     private View v;
-
+    //
+    private Handler mGameHandler;
 
 
     //-初始化 GridLayout, ImageViewArr 数据------------------------------------------
@@ -54,10 +58,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         System.out.println("当前布局下应当获取的随机图片张数:" + GameService.getNeedDrawableNum(SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0), rows, cols));   //todo
         // 获取随机的图片LIst
-        List<Pic> list = GameService.getCurrentDrawableList(true,
-                GameService.getNeedDrawableNum(
-                        SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0),
-                        rows, cols)
+        List<Pic> list = GameService.getCurrentDrawableList(GameService.getNeedDrawableNum(
+                SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0),
+                rows, cols)
         );
 
         // 将图片设置为ImageView的 background, 然后添加进Layout
@@ -114,20 +117,35 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             picTag = -1;   // 表示当前点击的是空白的图片
         }
 
-        GameService.onImageClick((int) v.getTag(R.id.imageViewIndex), (int) picTag, getContext());
+        GameService.onImageClick((int) v.getTag(R.id.imageViewIndex), (int) picTag, mGameHandler);
     }
     //----------------------------------------------------
 
     /**
-     * 设定Layout 的内容
-     *
-     * @param rows      行数
-     * @param cols      列数
-     * @param list      存放的
+     * 重新排布layout的view
      */
-    private void reLayout(int rows, int cols, List<Pic> list) {
-        // todo 遍历 sImageViewArr, || List<Pic>
-
+    public void reLayout() {
+        int indexBound = Config.GRID_COLS * Config.GRID_ROWS;
+        ArrayList<Pic> list = GameService.getCurrentDrawableList(-1);
+        // 先清空所有内容(初始化layout)
+        for (int i = 0; i < sImageViewArr.length; i++) {
+            if (sImageViewArr[i].getTag(R.id.PicTag) != null) {
+                sImageViewArr[i].setTag(R.id.PicTag, null);
+                sImageViewArr[i].setBackgroundResource(R.drawable.img_blank);
+                sImageViewArr[i].setImageDrawable(null);
+            }
+        }
+        //随机将 list中的图插入layout
+        Random r = new Random();
+        for (int i = 0; i < list.size(); i++) {
+            int j = r.nextInt(indexBound);
+            if (sImageViewArr[j].getTag(R.id.PicTag) == null) {
+                i--;
+                continue;
+            }
+            sImageViewArr[j].setBackground(list.get(i).drawable);
+            sImageViewArr[j].setTag(R.id.PicTag, list.get(i).tag);
+        }
     }
 
     //-初始化控件------------------------------------------
@@ -149,10 +167,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_pause:
                 // 暂停与开始
-                handleGamePlayOrPause(((GameActivity) getActivity()).mGameHandler);
+                Message.obtain(mGameHandler, GameActivity.MSG_WHAT_PAUSE_OR_PLAY, isGamePause ? 1 : 0, -1, isGamePause).sendToTarget();
                 break;
             case R.id.iv_reLayout:
-                ((GameActivity) getActivity()).mGameHandler.sendEmptyMessage(GameActivity.MSG_WHAT_RE_LAYOUT);
+                Message.obtain(mGameHandler, GameActivity.MSG_WHAT_RE_LAYOUT, this).sendToTarget();
                 break;
             // TODO: 2019/4/21 游戏结算页
             default:
@@ -163,10 +181,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     /**
      *
      */
-    private void handleGamePlayOrPause(Handler handler) {
-        isGamePause = !isGamePause;
-        handler.sendEmptyMessage(
-                isGamePause ? GameActivity.MSG_WHAT_PAUSE : GameActivity.MSG_WHAT_PLAY);
+    public void handlePlayOrPauseBtn(boolean setPause) {
+        isGamePause = setPause;
+
         // 配置按钮图标
         mPauseOrPlayImageView.setImageResource(
                 (isGamePause ? android.R.drawable.ic_media_play : android.R.drawable.ic_media_pause));
@@ -193,6 +210,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mGameHandler = ((GameActivity) context).mGameHandler;
     }
 
     @Override
@@ -203,6 +221,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-//        handleGamePlayOrPause();
+        Message.obtain(mGameHandler, GameActivity.MSG_WHAT_PAUSE_OR_PLAY, 1, -1, this);
     }
 }
