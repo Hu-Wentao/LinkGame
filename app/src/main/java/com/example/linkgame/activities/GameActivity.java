@@ -14,6 +14,7 @@ import com.example.linkgame.fragments.GameFragment;
 import com.example.linkgame.fragments.RankFragment;
 import com.example.linkgame.fragments.StartFragment;
 import com.example.linkgame.game.Config;
+import com.example.linkgame.game.ViewOp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +25,8 @@ public class GameActivity extends AppCompatActivity {
     public static final int
             MSG_WHAT_START_NEW_GAME = 0,
             MSG_WHAT_PAUSE_OR_PLAY = 1,
-//            MSG_WHAT_PLAY = 2,
-            MSG_WHAT_OVER = 3;
+    //            MSG_WHAT_PLAY = 2,
+    MSG_WHAT_OVER = 3;
     public static final int
             MSG_WHAT_REFRESH = 11,
             MSG_WHAT_INTERVAL = 12,
@@ -47,6 +48,7 @@ public class GameActivity extends AppCompatActivity {
                     GameTimer.start(Config.GAME_TIME, mGameHandler);
                     break;
                 case MSG_WHAT_PAUSE_OR_PLAY:    // 游戏暂停 或 继续
+                    System.out.println("收到 暂停或继续 message"); //todo
                     // 在离开app 或 点击暂停按钮 时自动调用,
                     boolean setPause = msg.arg1 == 1;
                     GameFragment f = (GameFragment) msg.obj;
@@ -77,18 +79,20 @@ public class GameActivity extends AppCompatActivity {
                     // 自动刷新 TextView
                     handleCountDownText(msg.arg1);
                     break;
-                case MSG_WHAT_REFRESH:  // 用户操作导致更新
+                case MSG_WHAT_REFRESH:  // 用户操作导致更新( 考虑在方块消除之后, 发送该消息)
                     // todo 刷新游戏分数
                     // todo 刷新界面
 
                     break;
                 case MSG_WHAT_RE_LAYOUT:  // 游戏手动重启(当游戏无法进行下去的时候)
+                    System.out.println("执行 游戏view 重排方法");   //todo
                     // 获取当前游戏内剩余的中英文图, 重新放置它们的位置
-                    ((GameFragment) msg.obj).reLayout();
+                    ViewOp.resetViewArrSrc();
+
                     break;
                 //--------------
                 case MSG_WHAT_SHOW_INDEX_LINK:
-                    List indexList = (ArrayList)msg.obj;
+                    List indexList = (ArrayList) msg.obj;
                     System.out.println(Arrays.toString(indexList.toArray()));   //todo
                     // todo 调用GameFragment 中的相应方法
                     break;
@@ -112,6 +116,10 @@ public class GameActivity extends AppCompatActivity {
             return new CountDownTimer(gameTime, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
+                    if(millisUntilFinished<1000){
+                        onFinish();
+                        return;
+                    }
                     saveMillisUntilFinished = millisUntilFinished;
 //                    System.out.println("定时器发送了消息!");//todo del
                     // 发送一个消息
@@ -134,23 +142,25 @@ public class GameActivity extends AppCompatActivity {
             if (timer == null) {
                 timer = getTimer(gameTime, handler);
             }
-//            System.out.println("计时器开始!"); // TODO: 2019/4/21 del
+            System.out.println("计时器开始!"); // TODO: 2019/4/21 del
             timer.start();
         }
 
         // 暂停
         public static void pause() {
-            if (timer != null)
+            if (timer != null) {
                 timer.cancel();
-//            System.out.println("计时器暂停!"); // TODO: 2019/4/21 del
+                timer = null;
+            }
+            System.out.println("计时器暂停!"); // TODO: 2019/4/21 del
 
         }
 
         // 恢复
         public static void play(Handler handler) {
             // TODO: 2019/4/21 尝试不加 900ms
-            start(saveMillisUntilFinished + 900, handler);
-//            System.out.println("计时器恢复!"); // TODO: 2019/4/21 del
+            start(saveMillisUntilFinished , handler);
+            System.out.println("计时器恢复!"); // TODO: 2019/4/21 del
         }
 
         // 取消计时器

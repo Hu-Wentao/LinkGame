@@ -37,28 +37,28 @@ public class GameService {
      * 处理ImageView 的点击事件
      *
      * @param viewIndex ImageView 在数组中的位置
-     * @param picTag    如果不为-1, 则表示 文字图片资源 的后缀
      */
-    public static void onImageClick(int viewIndex, int picTag, Handler handler) {
+    public static void onImageClick(int viewIndex, Handler handler) {
+        System.out.println("控件: " + viewIndex + "被点击了!");   //todo
         // 如果被点击的view 没有textTag, 则 取消已经被选中的view
-        if (picTag == -1) {
+        if (!ViewOp.hasPicTag(viewIndex)) {
             setSelectedView(-1);
             return;
         }
 
-        if (!isTextTagMatch(picTag)) {
+        if (!isTextTagMatch(viewIndex)) {
             // 如果不对应, 则退出, 并将最新的view 设为选中
             setSelectedView(viewIndex);
         } else {// 如果前后两个view 的 textTag是匹配的
             List<Integer> indexLink;
-            if ((indexLink = LinkUtils.getConnectLink(GameFragment.sImageViewArr, savedViewIndex, viewIndex)) == null) {
+            if ((indexLink = LinkUtils.getConnectLink(savedViewIndex, viewIndex)) == null) {
                 // 如果两个view不能进行连接
                 setSelectedView(viewIndex);
             } else {
                 // 两个view可以进行连接
-                int savedTag = picTag + (picTag % 2 == 0 ? 1 : -1);
+//                int savedTag = picTag + (picTag % 2 == 0 ? 1 : -1);
 
-                System.out.println("GameService :"+Arrays.toString(indexLink.toArray()));   //todo
+                System.out.println("GameService :" + Arrays.toString(indexLink.toArray()));   //todo
                 if (indexLink.size() > 2) {
                     // 发送 Message 显示连接线 (如果 indexLink 长度等于2, 则不发送)
                     System.out.println("发送了显示路径的消息");   //todo
@@ -69,23 +69,18 @@ public class GameService {
                     m.obj = indexLink;
                     handler.sendMessageDelayed(m, 300);
                 }
-                // 将savedViewIndex ,viewIndex 的图,tag 都设为空
-                GameFragment.sImageViewArr[savedViewIndex].setBackground(new ColorDrawable(0xFFFFFF));
-                GameFragment.sImageViewArr[savedViewIndex].setTag(R.id.PicTag, null);
-                GameFragment.sImageViewArr[viewIndex].setBackground(new ColorDrawable(0xFFFFFF));
-                GameFragment.sImageViewArr[viewIndex].setTag(R.id.PicTag, null);
-
-
                 // 从 list中移除被消除的 Pic
-                removeByPicTag(savedTag);
-                removeByPicTag(picTag);
+                removeByPicTag(ViewOp.getPicTag(savedViewIndex));
+                removeByPicTag(ViewOp.getPicTag(viewIndex));
+
+                // 将savedViewIndex ,viewIndex 的图,tag 都设为空
+                ViewOp.setBlank(savedViewIndex);
+                ViewOp.setBlank(viewIndex);
+
                 // 检测 sCurrentDrawableList 中是否还有元素, 如果没有,则 游戏结束
                 if (sCurrentDrawableList.isEmpty()) {
                     handler.sendEmptyMessage(GameActivity.MSG_WHAT_OVER);
                 }
-                // 移除
-                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
-                GameFragment.sImageViewArr[savedViewIndex].setImageResource(R.drawable.img_blank);
                 savedViewIndex = -1;
                 setSelectedView(-1);
             }
@@ -97,19 +92,19 @@ public class GameService {
 //==================================================================================================
 
     // 判断这两个view的 textTag 是否是对应的
-    private static boolean isTextTagMatch(int currentPicTag) {
+    private static boolean isTextTagMatch(int currentViewIndex) {
         // 如果当前没有已被选中的图, 则跳过match
         if (savedViewIndex == -1) {
             return false;
         }
-        // 已被选中的view 的tag值
-        int t = (int) GameFragment.sImageViewArr[savedViewIndex].getTag(R.id.PicTag);
-        return t + (t % 2 == 0 ? 1 : -1) == currentPicTag;
+        return ViewOp.isPicTagMatch(currentViewIndex, savedViewIndex);
+//        int t = (int) GameFragment.sImageViewArr[savedViewIndex].getTag(R.id.PicTag);
+//        return t + (t % 2 == 0 ? 1 : -1) == currentPicTag;
     }
-    // 设置被选中的View, 如果 index为 -1 表示 清除已经被选中的 view 标识
 
     /**
      * 处理 ImageView 的选中与未选中
+     * 设置被选中的View, 如果 index为 -1 表示 清除已经被选中的 view 标识
      *
      * @param viewIndex 当前正在被点击的ImageView 的 index
      */
@@ -117,17 +112,21 @@ public class GameService {
         if (savedViewIndex != -1) { // 如果当前已经有一个 view 被设为选中状态
             if (viewIndex == -1) {  // 如果当前被点击的view 没有textTag
                 // 取消已经被选中的view
-                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
+                ViewOp.setSelect(savedViewIndex, false);
+//                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
                 savedViewIndex = -1;
             } else {  // 如果当前被点击的view 有textTag
                 // 删除原来的被选中的图的选中状态, 将当前设为选中状态
-                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
-                GameFragment.sImageViewArr[viewIndex].setImageResource(R.drawable.selected);
+                ViewOp.setSelect(savedViewIndex, false);
+                ViewOp.setSelect(viewIndex, true);
+//                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
+//                GameFragment.sImageViewArr[viewIndex].setImageResource(R.drawable.selected);
                 savedViewIndex = viewIndex;
             }
         } else { // 如果当前没有 view 被设为选中状态
             if (viewIndex != -1) { // 如果当前被点击的view 有textTag
-                GameFragment.sImageViewArr[viewIndex].setImageResource(R.drawable.selected);
+                ViewOp.setSelect(viewIndex, true);
+//                GameFragment.sImageViewArr[viewIndex].setImageResource(R.drawable.selected);
                 savedViewIndex = viewIndex;
             }
         }
