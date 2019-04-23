@@ -1,20 +1,9 @@
 package com.example.linkgame.utils;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-import com.example.linkgame.R;
-import com.example.linkgame.View.PieceImage;
 import com.example.linkgame.game.Config;
 import com.example.linkgame.game.Pic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 
@@ -28,36 +17,6 @@ public class ImageUtil {
      */
     private static Drawable[] drawableArr;
 
-
-    /**
-     * //todo 废弃
-     * 将图片ID集合转换PieceImage对象集合，PieceImage封装了图片ID与图片本身
-     *
-     * @return size个PieceImage对象的集合
-     */
-//    public static List<PieceImage> getPlayImages(int size) {
-//
-//        // 获取图片ID组成的集合
-//        Object[] randomPicIndexList = getRandomPicIndexList(size);
-//
-//        List<PieceImage> result = new ArrayList<PieceImage>();
-//        // 遍历每个图片ID
-//        for (Object value : randomPicIndexList) {
-//            Integer val = (Integer) value;
-//            // 加载图片
-//            Bitmap bm = drawableToBitmap(getAllDrawable()[val]);
-//            // 封装图片ID与图片本身
-//            PieceImage pieceImage = new PieceImage(bm, val);
-//            result.add(pieceImage);
-//        }
-//
-//        return result;
-//    }
-
-
-    // 为 drawableList赋值
-
-
     /**
      * 获取指定数量的, 随机的图片(中英对应的)
      * <p>
@@ -68,7 +27,7 @@ public class ImageUtil {
      */
     public static Pic[] getRandomDrawableArr(int size) {
         if (size % 2 != 0) {
-            System.out.println("size"+size);   //todo
+//            System.out.println("size"+size);   //todo
             throw new IllegalArgumentException("参数必须是偶数");
 //            size--;
         }
@@ -99,77 +58,5 @@ public class ImageUtil {
             }
         }
         return drawableArr;
-    }
-
-
-    /**
-     * // todo 废弃
-     * 从drawable目录中中获取size个图片资源ID(以p_为前缀的资源名称), 其中size为游戏数量
-     *
-     * @param size 需要获取的图片ID的数量
-     * @return size个图片ID的集合
-     */
-    private static Object[] getRandomPicIndexList(int size) {
-        if (size % 2 != 0) {
-            // 如果该数除2有余数，将size加1
-            size += 1;
-        }
-        List<Integer> playImageValues = new ArrayList<>(size);
-        // 为List添加 size对 中文+英文 图, 共计size个
-        Random random = new Random();
-        for (int i = 0; i < size / 2; i++) {  // 此处 size/2 因为一个循环中添加了2个元素
-            int t = random.nextInt(Config.ALL_IMG_NUM_PAIR);
-            playImageValues.add(t * 2);     // 添加一个 中文图的index
-            playImageValues.add(t * 2 + 1); // 添加一个 中文图对应的英文图的index
-        }
-        //将所有图片ID随机“洗牌”
-        Collections.shuffle(playImageValues);
-        return playImageValues.toArray();
-
-//        //  如果需要不重复的中英文图片index组, 则使用下面的代码
-//        HashSet<Integer> playImageValues = new HashSet<>(size);
-//        Random random = new Random();
-//        while (playImageValues.size() < size) {
-//            int t = random.nextInt(GameConf.ALL_IMG_NUM_PAIR);
-//            playImageValues.add(t * 2);     // 添加一个 中文图的index
-//            playImageValues.add(t * 2 + 1); // 添加一个 中文图对应的英文图的i
-//        }
-//        return playImageValues.toArray();
-    }
-
-
-    /**
-     * //todo 可能废弃
-     * 将Drawable转换为Bitmap
-     */
-//    private static Bitmap drawableToBitmap(Drawable drawable) {
-//        if (drawable instanceof BitmapDrawable) {
-//            return ((BitmapDrawable) drawable).getBitmap();
-//        }
-////        Bitmap bitmap = Bitmap.createBitmap(
-////                drawable.getIntrinsicWidth(),
-////                drawable.getIntrinsicHeight(),
-////                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-////                        : Bitmap.Config.RGB_565);
-////        Canvas canvas = new Canvas(bitmap);
-////        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-////                drawable.getIntrinsicHeight());
-//
-//        Bitmap bitmap = Bitmap.createBitmap(GameConf.PIECE_WIDTH, GameConf.PIECE_HEIGHT, Bitmap.Config.RGB_565);
-//        Canvas canvas = new Canvas(bitmap);
-//        drawable.setBounds(0, 0, GameConf.PIECE_WIDTH, GameConf.PIECE_HEIGHT);
-//        drawable.draw(canvas);
-//        return bitmap;
-//    }
-
-
-    /**
-     * 获取选中标识的图片
-     *
-     * @param context
-     * @return 选中标识的图片
-     */
-    public static Bitmap getSelectImage(Context context) {
-        return BitmapFactory.decodeResource(context.getResources(), R.drawable.selected);
     }
 }

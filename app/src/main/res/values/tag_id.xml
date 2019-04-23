@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 一张 文字图 的文件索引号, 用于中英文字图配对-->
-    <item type="id" name="PicTag"/>
+    <!--<item type="id" name="PicTag"/>-->
     <!--一个ImageView 的索引号-->
     <item type="id" name="imageViewIndex"/>
 </resources>

@@ -1,14 +1,12 @@
 package com.example.linkgame.game;
 
 
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
-import com.example.linkgame.R;
+import com.example.linkgame.BuildConfig;
 import com.example.linkgame.activities.GameActivity;
-import com.example.linkgame.fragments.GameFragment;
 import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkUtils;
 
@@ -39,7 +37,8 @@ public class GameService {
      * @param viewIndex ImageView 在数组中的位置
      */
     public static void onImageClick(int viewIndex, Handler handler) {
-        System.out.println("控件: " + viewIndex + "被点击了!");   //todo
+        if (BuildConfig.DEBUG)
+            Log.d("GameService", "控件: " + viewIndex + "被点击了!" + "picTag为: " + ViewOp.getPicTag(viewIndex));
         // 如果被点击的view 没有textTag, 则 取消已经被选中的view
         if (!ViewOp.hasPicTag(viewIndex)) {
             setSelectedView(-1);
@@ -56,12 +55,8 @@ public class GameService {
                 setSelectedView(viewIndex);
             } else {
                 // 两个view可以进行连接
-//                int savedTag = picTag + (picTag % 2 == 0 ? 1 : -1);
-
-                System.out.println("GameService :" + Arrays.toString(indexLink.toArray()));   //todo
                 if (indexLink.size() > 2) {
                     // 发送 Message 显示连接线 (如果 indexLink 长度等于2, 则不发送)
-                    System.out.println("发送了显示路径的消息");   //todo
                     Message.obtain(handler, GameActivity.MSG_WHAT_SHOW_INDEX_LINK, indexLink).sendToTarget();
                     // 发送 延迟Message 清除连接线(可以在此播放音效)
                     Message m = Message.obtain();
@@ -204,11 +199,11 @@ public class GameService {
     }
 
     /**
-     * 通过 tag 删除list中指定元素
+     * 通过 tag 删除 sCurrentDrawableList 中指定元素
      *
      * @param tag picTag
      */
-    public static void removeByPicTag(int tag) {
+    private static void removeByPicTag(int tag) {
         Iterator<Pic> it = sCurrentDrawableList.iterator();
         while (it.hasNext()) {
             if (it.next().tag == tag) {

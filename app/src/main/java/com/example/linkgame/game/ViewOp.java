@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 
 import java.util.ArrayList;
@@ -19,24 +20,45 @@ import static android.content.ContentValues.TAG;
  * @Date: 2019/4/22
  */
 public class ViewOp {
-    //======== test ======================================================================
-    public static void testShowTag(){
-        String s ="";
-        for (int i = 0; i < picTagArr.length; i++) {
-            s+="  "+picTagArr[i];
-            if(i%Config.GRID_COLS == 0){
-                s+="\n";
-            }
-        }
-
-        Log.d(TAG, "testShowTag: "+ s);
-    }
-    //======== test ======================================================================
-
     // layout 中的 ImageView 控件数组, 该数组的索引 与ImageView 在GridLayout中的位置 直接相关
     private static ImageView[] viewArr;
     // 每个ImageView控件 对应的 Tag
     private static Integer[] picTagArr;       // 目前 ImageView 元素仅需要设置 viewIndex 的tag, 用于点击事件, 以确定被点击的控件
+
+    //======== test ======================================================================
+    public static void testShowTag() {
+        String s = "";
+        for (int i = 0; i < picTagArr.length; i++) {
+            if (i % (Config.GRID_COLS) == 0) {
+                s += "\n";
+            }
+            if (picTagArr[i] != null) {
+                s += "  " + picTagArr[i] + (picTagArr[i] < 10 ? "   " : "  ");
+            } else {
+                s += "  " + picTagArr[i];
+            }
+        }
+        Log.d(TAG, "testShowTag:" + s
+//                + "\n tagArr长度:" + picTagArr.length
+        );
+    }
+    //======== bind = 绑定 Pic数组 与 ImageView 数组 的关系=====================================================================
+
+    /**
+     * 绑定 Pic数组 与 ImageView 数组 的关系
+     *
+     * @param viewIndex ImageView数组索引
+     * @param p         如果p为 null , 则表示这个控件不绑定任何pic , 应当将其 背景设为 img_blank
+     */
+    public static void bindPicToView(int viewIndex, Pic p) {
+        if(p == null){
+            viewArr[viewIndex].setBackgroundResource(R.drawable.img_blank);
+            return;
+        }
+        viewArr[viewIndex].setBackground(p.drawable);   // 绑定背景图片
+        picTagArr[viewIndex] = p.tag;   // 绑定tag
+    }
+
 
     //======== set ======================================================================
 
@@ -52,12 +74,13 @@ public class ViewOp {
     }
 
     // 为view添加Tag
-    public static void setTag(int index, int tag) {
+    private static void setTag(int index, int tag) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "为" + index + "号view添加picTag:" + tag);
         picTagArr[index] = tag;
     }
 
     // 同时添加 Background
-    public static void setBackground(int index, Drawable bg) {
+    private static void setBackground(int index, Drawable bg) {
         viewArr[index].setBackground(bg);
     }
 
@@ -67,32 +90,36 @@ public class ViewOp {
     }
 
     // 将view backGround设为 img_blank, 并且删除picTag
-    public static void setBlank(int index){
+    static void setBlank(int index) {
         viewArr[index].setImageDrawable(null);
         viewArr[index].setBackgroundResource(R.drawable.img_blank);
         picTagArr[index] = null;
     }
+
     // 将指定 view 设为选中, 或取消选中
-    public static void setSelect(int index, boolean setSelect){
-        if(setSelect){
+    static void setSelect(int index, boolean setSelect) {
+        if (setSelect) {
             viewArr[index].setImageResource(R.drawable.selected);
-        }else {
+        } else {
             viewArr[index].setImageDrawable(null);
         }
     }
+
     //======== get ======================================================================
-    public static int getPicTag(int index){
+    static int getPicTag(int index) {
         return picTagArr[index];
     }
+
     //======== is ======================================================================
     // true: 该控件有picTag
-    public static boolean hasPicTag(int index){
+    public static boolean hasPicTag(int index) {
         return picTagArr[index] != null;
     }
+
     // true: 两个 view 的tag 是中英对应的
-    public static boolean isPicTagMatch(int viewIndexA, int viewIndexB){
+    static boolean isPicTagMatch(int viewIndexA, int viewIndexB) {
         int tagA = picTagArr[viewIndexA], tagB = picTagArr[viewIndexB];
-        return tagA + (tagA%2 == 0?1:-1) == tagB;
+        return tagA + (tagA % 2 == 0 ? 1 : -1) == tagB;
     }
 
     /**

@@ -6,8 +6,10 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 import com.example.linkgame.db.SharedData;
 import com.example.linkgame.fragments.GameFragment;
@@ -93,8 +95,8 @@ public class GameActivity extends AppCompatActivity {
                 //--------------
                 case MSG_WHAT_SHOW_INDEX_LINK:
                     List indexList = (ArrayList) msg.obj;
-                    System.out.println(Arrays.toString(indexList.toArray()));   //todo
-                    // todo 调用GameFragment 中的相应方法
+                    if (BuildConfig.DEBUG) Log.d("GameActivity", "收到了显示路径的消息\n路径: "+Arrays.toString(indexList.toArray()));
+                    // todo 调用GameFragment 中的相应方法, 展示路径
                     break;
                 case MSG_WHAT_HIDE_INDEX_LINK:
                     break;

@@ -62,11 +62,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         mGridLayout.setColumnCount(cols);
         // 初始化 ImageViewArr
         ViewOp.initViewArr(cols*rows);
-//        sImageViewArr = new ImageView[cols * rows];
 
-        System.out.println("当前布局下应当获取的随机图片张数:" + GameService.getNeedDrawableNum(SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0), rows, cols));   //todo
+//        System.out.println("当前布局下应当获取的随机图片张数:" + GameService.getNeedDrawableNum(SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0), rows, cols));   //todo
         // 获取随机的图片LIst
-        List<Pic> list = GameService.getCurrentDrawableList(GameService.getNeedDrawableNum(
+        List<Pic> picList = GameService.getCurrentDrawableList(GameService.getNeedDrawableNum(
                 SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0),
                 rows, cols)
         );
@@ -81,27 +80,16 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             // 创建控件
             ViewOp.setView(i, new ImageView(getContext()));
 //            sImageViewArr[i] = new ImageView(getContext());
-            Drawable tmp;
-//            if (GameService.needSetTextImg(i, gameStyle, rows, cols) && currentDrawableIndex<list.size()) {   //如果出现错误, 可以使用本行代码查看出错后的图片排布
-            if (GameService.needSetTextImg(i, gameStyle, rows, cols)) {
-                Pic pic = list.get(currentDrawableIndex++);
-                tmp = pic.drawable;
-//                System.out.println("添加ImageView ,tag为: " + pic.tag);    //todo del
-                ViewOp.setTag(i, pic.tag);
-//                sImageViewArr[i].setTag(R.id.PicTag, pic.tag);
-            } else {
-                tmp = getContext().getDrawable(R.drawable.img_blank);
-            }
-            // 配置ImageViewArr 背景图, 索引号
-            ViewOp.setBackground(i, tmp);
-//            ViewOp.setTag(i, i);
-//            sImageViewArr[i].setBackground(tmp);
-            ViewOp.get(i).setTag(R.id.imageViewIndex, i);  // todo imageViewIndex 考虑替代(picTag已替代)
-//            sImageViewArr[i].setTag(R.id.imageViewIndex, i);
 
+            //绑定 Pic数组 与 ImageView 数组 的关系
+            if (GameService.needSetTextImg(i, gameStyle, rows, cols)) {
+                ViewOp.bindPicToView(i, picList.get(currentDrawableIndex++));
+            } else {
+                ViewOp.bindPicToView(i, null);
+            }
+            ViewOp.get(i).setTag(R.id.imageViewIndex, i);  // todo 现在点击事件时会用到, 暂时不删 - imageViewIndex 考虑替代(picTag已替代)
             //--将ImageView 添加到 点击监听器----------------------------------------------------------
             ViewOp.get(i).setOnClickListener(new View.OnClickListener() {
-//            sImageViewArr[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onImgClick(v);
@@ -120,7 +108,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     Config.GRID_LAYOUT_VIEW_MARGIN[2],
                     Config.GRID_LAYOUT_VIEW_MARGIN[3]);
             mGridLayout.addView(ViewOp.get(i), layoutParams);
-//            mGridLayout.addView(sImageViewArr[i], layoutParams);
         }
 
     }
