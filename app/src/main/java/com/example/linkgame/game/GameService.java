@@ -108,20 +108,16 @@ public class GameService {
             if (viewIndex == -1) {  // 如果当前被点击的view 没有textTag
                 // 取消已经被选中的view
                 ViewOp.setSelect(savedViewIndex, false);
-//                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
                 savedViewIndex = -1;
             } else {  // 如果当前被点击的view 有textTag
                 // 删除原来的被选中的图的选中状态, 将当前设为选中状态
                 ViewOp.setSelect(savedViewIndex, false);
                 ViewOp.setSelect(viewIndex, true);
-//                GameFragment.sImageViewArr[savedViewIndex].setImageDrawable(null);
-//                GameFragment.sImageViewArr[viewIndex].setImageResource(R.drawable.selected);
                 savedViewIndex = viewIndex;
             }
         } else { // 如果当前没有 view 被设为选中状态
             if (viewIndex != -1) { // 如果当前被点击的view 有textTag
                 ViewOp.setSelect(viewIndex, true);
-//                GameFragment.sImageViewArr[viewIndex].setImageResource(R.drawable.selected);
                 savedViewIndex = viewIndex;
             }
         }
