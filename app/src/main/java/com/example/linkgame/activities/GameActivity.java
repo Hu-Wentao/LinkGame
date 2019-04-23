@@ -18,7 +18,6 @@ import com.example.linkgame.fragments.StartFragment;
 import com.example.linkgame.game.Config;
 import com.example.linkgame.game.ViewOp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class GameActivity extends AppCompatActivity {
                     break;
                 //--------------
                 case MSG_WHAT_SHOW_INDEX_LINK:
-                    List indexList = (ArrayList) msg.obj;
+                    List indexList = (List) msg.obj;
                     if (BuildConfig.DEBUG) Log.d("GameActivity", "收到了显示路径的消息\n路径: "+Arrays.toString(indexList.toArray()));
                     // todo 调用GameFragment 中的相应方法, 展示路径
                     break;

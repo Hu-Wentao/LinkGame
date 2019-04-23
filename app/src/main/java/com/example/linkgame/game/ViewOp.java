@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -132,7 +132,7 @@ public class ViewOp {
      * * 2. 重新设置View  的图片资源
      */
     public static void resetViewArrSrc() {
-        ArrayList<Pic> list = GameService.getCurrentDrawableList(-1);
+        LinkedList<Pic> list = GameService.getCurrentDrawableList(-1);
 
         for (int i = 0; i < picTagArr.length; i++) {
             if (picTagArr[i] != null) {

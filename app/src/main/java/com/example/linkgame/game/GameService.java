@@ -10,7 +10,7 @@ import com.example.linkgame.activities.GameActivity;
 import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkUtils;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -178,7 +178,7 @@ public class GameService {
      * 当前在 Layout中显示的 所有非空的图片,(其下标不表示指定图片在Layout中的位置)
      * 其数量由 指定的行数,列数 与 STYLE 共同确定
      */
-    private static ArrayList<Pic> sCurrentDrawableList;
+    private static LinkedList<Pic> sCurrentDrawableList;
 
     /**
      * 获取当前正在显示的 文字图片, 如果当前没有, 则自动生成随机的
@@ -189,9 +189,9 @@ public class GameService {
      *                    图片数量(必须是偶数)(已在内部方法中完成检验步骤)
      * @return Drawable数组
      */
-    public static ArrayList<Pic> getCurrentDrawableList(int defaultSize) {
+    public static LinkedList<Pic> getCurrentDrawableList(int defaultSize) {
         if (sCurrentDrawableList == null || defaultSize != -1) {
-            sCurrentDrawableList = new ArrayList<>();
+            sCurrentDrawableList = new LinkedList<>();
             Collections.addAll(sCurrentDrawableList, ImageUtil.getRandomDrawableArr(defaultSize));  // 将数组全部添加到
             Collections.shuffle(sCurrentDrawableList);  // 打乱图片顺序
         }
