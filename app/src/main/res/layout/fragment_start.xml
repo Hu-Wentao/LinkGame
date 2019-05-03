@@ -21,13 +21,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_rank"
+        android:id="@+id/btn_about"
         android:layout_width="0dp"
         android:layout_height="49dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/shape_radius"
         android:backgroundTint="@color/btnColor"
-        android:text="排行榜"
+        android:text="关于"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_gameType1"
+        app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_radius"
+        android:backgroundTint="@color/btnColor"
+        android:text="退出登录"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
         app:layout_constraintHorizontal_bias="0.0"
@@ -60,5 +74,6 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
         app:layout_constraintStart_toStartOf="@+id/btn_gameType1"
-        app:layout_constraintTop_toBottomOf="@+id/btn_rank" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_about" />
+
 </android.support.constraint.ConstraintLayout>

@@ -4,14 +4,15 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
+import com.example.linkgame.utils.MyApplication;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * 用于操作 layout 中ImageView (或许能够与 Pic 类 合并)
@@ -20,6 +21,7 @@ import static android.content.ContentValues.TAG;
  * @Date: 2019/4/22
  */
 public class ViewOp {
+    private static final String TAG = "ViewOp ";
     // layout 中的 ImageView 控件数组, 该数组的索引 与ImageView 在GridLayout中的位置 直接相关
     private static ImageView[] viewArr;
     // 每个ImageView控件 对应的 Tag
@@ -51,12 +53,13 @@ public class ViewOp {
      * @param p         如果p为 null , 则表示这个控件不绑定任何pic , 应当将其 背景设为 img_blank
      */
     public static void bindPicToView(int viewIndex, Pic p) {
-        if(p == null){
+        if (p == null) {
             viewArr[viewIndex].setBackgroundResource(R.drawable.img_blank);
             return;
         }
         viewArr[viewIndex].setBackground(p.drawable);   // 绑定背景图片
         picTagArr[viewIndex] = p.tag;   // 绑定tag
+//        viewArr[viewIndex].setOnClickListener( );
     }
 
 
@@ -75,7 +78,7 @@ public class ViewOp {
 
     // 为view添加Tag
     private static void setTag(int index, int tag) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "为" + index + "号view添加picTag:" + tag);
+//        if (BuildConfig.DEBUG) Log.d(TAG, "为" + index + "号view添加picTag:" + tag);
         picTagArr[index] = tag;
     }
 
@@ -110,7 +113,10 @@ public class ViewOp {
         return picTagArr[index];
     }
 
-    //======== is ======================================================================
+    //======== is =======================================================================
+    public static boolean isLegalIndex(int index){
+        return index>0 && index< Config.GRID_COLS*Config.GRID_ROWS;
+    }
     // true: 该控件有picTag
     public static boolean hasPicTag(int index) {
         return picTagArr[index] != null;
@@ -118,12 +124,16 @@ public class ViewOp {
 
     // true: 两个 view 的tag 是中英对应的
     static boolean isPicTagMatch(int viewIndexA, int viewIndexB) {
+//        if (picTagArr[viewIndexA] == null || picTagArr[viewIndexB] == null) {
+//            Log.d(TAG, "异常!  错误的匹配: viewIndexA:" + viewIndexA + " viewIndexB: " + viewIndexB);
+//            // 可能是由于布局变化导致的, 应当在布局刷新之后, 重置已设为标记的view (已完成)
+//        }
         int tagA = picTagArr[viewIndexA], tagB = picTagArr[viewIndexB];
         return tagA + (tagA % 2 == 0 ? 1 : -1) == tagB;
     }
 
     /**
-     * 重新排布layout的view
+     * 重新排布layout的view 并重置 savedViewIndex
      * <p>
      * * 1. 清空 ViewArr 的 picTag,
      * 将 background 均设为 img_blank
@@ -132,6 +142,7 @@ public class ViewOp {
      * * 2. 重新设置View  的图片资源
      */
     public static void resetViewArrSrc() {
+        GameService.savedViewIndex = -1;
         LinkedList<Pic> list = GameService.getCurrentDrawableList(-1);
 
         for (int i = 0; i < picTagArr.length; i++) {
@@ -141,16 +152,26 @@ public class ViewOp {
                 picTagArr[i] = null;
             }
         }
-
         Random r = new Random();
         for (int i = 0; i < list.size(); i++) {
             int j = r.nextInt(Config.GRID_COLS * Config.GRID_ROWS);
-            if (picTagArr[i] == null) {
+            if (picTagArr[j] != null) {
                 i--;
                 continue;
             }
             setBackground(j, list.get(i).drawable);
             setTag(j, list.get(i).tag);
+        }
+    }
+
+    /**
+     * 给路径上的空白图换成红点图 img_point
+     * @param indexLink
+     */
+    public static void setFlag(boolean isSet, List indexLink){
+        Iterator it = indexLink.iterator();
+        while (it.hasNext()){
+            get((Integer)it.next()).setImageDrawable(MyApplication.getContext().getDrawable(isSet?R.drawable.img_point:R.drawable.img_blank));
         }
     }
 }

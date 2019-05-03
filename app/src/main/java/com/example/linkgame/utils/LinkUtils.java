@@ -8,10 +8,6 @@ import com.example.linkgame.game.ViewOp;
 
 import java.util.LinkedList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import static android.support.constraint.Constraints.TAG;
 
 
 /**
@@ -21,6 +17,7 @@ import static android.support.constraint.Constraints.TAG;
  * @Date: 2019/4/21
  */
 public class LinkUtils {
+    private static final String TAG = "LinkUtils:";
     /**
      * 获取两个view 之间的 连接路径, 由view的索引构成, 包括起始点和结束点(savedIndex与index)
      *
@@ -61,7 +58,7 @@ public class LinkUtils {
             return list;
         }
 
-        ViewOp.testShowTag();   //todo
+//        ViewOp.testShowTag();   // 用于调试
         if (BuildConfig.DEBUG) Log.d(TAG, "getConnectLink: 尝试了所有方法后, 返回了null, 无法找到有效路径");
         return null;
     }
@@ -119,11 +116,11 @@ public class LinkUtils {
                     break;
                 }
                 if (BuildConfig.DEBUG) Log.d(TAG, "进行3线连接内的2线连接, check为: " + ch);
-                LinkedList<Integer> path3 ;
+                LinkedList<Integer> path3;
                 if ((path3 = getTowLineLink(check, e2Index)) != null) {     // 三线连接内的 两线连
                     path3.addFirst(convert(s2Index));
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "3线连接完成, 返回List为:" + Arrays.toString(path3.toArray()));    //todo
+//                    if (BuildConfig.DEBUG)
+//                        Log.d(TAG, "3线连接完成, 返回List为:" + Arrays.toString(path3.toArray()));
                     return path3;
                 }
 
@@ -143,12 +140,13 @@ public class LinkUtils {
     private static LinkedList<Integer> getTowLineLink(int[] s2Index, int[] e2Index) {
         LinkedList<Integer> list;
 
-        if (!ViewOp.hasPicTag(convert(s2Index[0], e2Index[1]))) {  // 如果 上侧 的 折点 是空白的       // checked
+        // 首先检测合法性
+        if (ViewOp.isLegalIndex(convert(s2Index[0], e2Index[1])) && !ViewOp.hasPicTag(convert(s2Index[0], e2Index[1]))) {  // 如果 上侧 的 折点 是空白的       // checked
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "两线 连接: 上边的折点是空白的, 折点index: " + convert(s2Index[0], e2Index[1]));
             if ((list = getMorePointChannel(s2Index, new int[]{s2Index[0], e2Index[1]}, e2Index)) != null)
                 return list;
-        } else if (!ViewOp.hasPicTag(convert(e2Index[0], s2Index[1]))) {// 如果 下边 的折点是空白的    // checked
+        } else if (ViewOp.isLegalIndex(convert(e2Index[0], s2Index[1])) && !ViewOp.hasPicTag(convert(e2Index[0], s2Index[1]))) {// 如果 下边 的折点是空白的    // checked
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "两线 连接: 下边的折点是空白的, 折点index: " + convert(s2Index[0], e2Index[1]));
             if ((list = getMorePointChannel(s2Index, new int[]{e2Index[0], s2Index[1]}, e2Index)) != null)
@@ -185,7 +183,7 @@ public class LinkUtils {
      * @param end   一维索引较大的位置
      * @return 如果有障碍 则返回null
      */
-    private static LinkedList<Integer> getDirectChannel(int[] start, int[] end) {    // todo 发现bug 如果两点相邻, 则无法正确判断
+    private static LinkedList<Integer> getDirectChannel(int[] start, int[] end) {
         if (convert(start) > convert(end)) {
             return getDirectChannel(end, start);
         }
@@ -199,7 +197,6 @@ public class LinkUtils {
         }
         //-----------------------------------------------------------------------------------------
         if (BuildConfig.DEBUG) Log.d(TAG, " test : 执行两点直连 方法..");
-        // todo 存在问题: 如果两点相邻, 则返回出错
         // 从start处 向下探测
         int[] check = {start[0], start[1]};
         int ch = convert(check);
@@ -211,11 +208,11 @@ public class LinkUtils {
             check[xOrY]++; // 探测点 向下 \ 向右 移动 1 格
             ch = convert(check);
             // 如果 探测点越界, 或者 探测点 有障碍
-            if (ch < 0 || ch > Config.GRID_ROWS * Config.GRID_COLS ) {
+            if (ch < 0 || ch > Config.GRID_ROWS * Config.GRID_COLS) {
                 if (BuildConfig.DEBUG) Log.d(TAG, "探测点越界");
                 return null;    // 探测点越界!
             }
-            if(ViewOp.hasPicTag(convert(check)) && check[xOrY] != end[xOrY]){
+            if (ViewOp.hasPicTag(convert(check)) && check[xOrY] != end[xOrY]) {
                 return null;    // 探测点遇到障碍, 且障碍点 不是终点
             }
             path.add(ch);   // 该探测点有效, 将该点加入 路径 path

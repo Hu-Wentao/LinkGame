@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,11 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 import com.example.linkgame.db.DbContract;
 import com.example.linkgame.db.SharedData;
 import com.example.linkgame.db.UserDbHelper;
-import com.example.linkgame.utils.MyApplication;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
+        init();
     }
 
 
@@ -118,12 +119,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(username)){
+        if (TextUtils.isEmpty(username)) {
             mLoginUserNameView.setError("用户名不能为空");
             focusView = mLoginUserNameView;
             cancel = true;
         }
-
 
         if (TextUtils.isEmpty(password) && !isVisitorLogin) {
             mLoginPasswordView.setError("密码不能为空");
@@ -131,7 +131,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             cancel = true;
         }
 
-        System.out.println("当前cancel:" + cancel + "isVisitorLogin: " + isVisitorLogin); //todo
+        if (BuildConfig.DEBUG)
+            Log.d("LoginActivity", "当前cancel:" + cancel + "isVisitorLogin: " + isVisitorLogin);
 
         if (cancel) {
             focusView.requestFocus();
@@ -139,6 +140,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // 如果是访客登录, 则直接开始
             if (isVisitorLogin || check(username, password)) {
                 SharedData.setCurrentAccount(username);
+                Intent intent = new Intent(this, GameActivity.class);
+
+                intent.putExtra(SharedData.INTENT_MSG, SharedData.INTENT_TO_START);   //todo extra 问题
                 startActivity(new Intent(this, GameActivity.class));
             }
         }
@@ -152,16 +156,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mRegisterUserNameView.setError(null);
         mRegisterPasswordView.setError(null);
 
-        String username = mRegisterUserNameView.getText().toString();
+        String userName = mRegisterUserNameView.getText().toString();
         String password = mRegisterPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(userName)) {
             mRegisterUserNameView.setError("用户名不能为空");
             focusView = mRegisterUserNameView;
             cancel = true;
+        }else { // 检测用户名是否重复
+            Cursor cursor = mReadableDb.query(DbContract.UserEntry.TABLE_NAME,
+                    new String[]{DbContract.UserEntry.COLUMN_USER_PWD},
+                    DbContract.UserEntry.COLUMN_USER_ACCOUNT + "=?",
+                    new String[]{userName},
+                    null,
+                    null,
+                    DbContract.UserEntry._ID
+            );
+            // 如果找到相同的用户名
+            if (cursor.getCount() != 0) {
+                Toast.makeText(this, "用户名已存在, 请重新输入, 或直接登录", Toast.LENGTH_SHORT).show();
+                cursor.close();
+                focusView = mRegisterUserNameView;
+                cancel = true;
+            }
         }
 
 
@@ -175,29 +195,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (cancel) {
             focusView.requestFocus();
         } else {
-            addNewUser(username, password);
-            SharedData.setCurrentAccount(username);
+            addNewUser(userName, password);
+            SharedData.setCurrentAccount(userName);
             startActivity(new Intent(this, GameActivity.class));
         }
     }
 
     //----------数据库操作
-    private SQLiteDatabase mReadableDb = new UserDbHelper(MyApplication.getContext()).getReadableDatabase();
-    private SQLiteDatabase mWritableDb = new UserDbHelper(MyApplication.getContext()).getWritableDatabase();
+    private SQLiteDatabase mReadableDb ;
+    private SQLiteDatabase mWritableDb;
 
     /**
      * 检测用户名密码是否正确
      *
-     * @param userAccount 用户名
+     * @param userName 用户名
      * @param pwd         密码
      * @return 是否登录
      */
-    private boolean check(String userAccount, String pwd) {
+    private boolean check(String userName, String pwd) {
         // 创建一个指针
         Cursor cursor = mReadableDb.query(DbContract.UserEntry.TABLE_NAME,
                 new String[]{DbContract.UserEntry.COLUMN_USER_PWD},
                 DbContract.UserEntry.COLUMN_USER_ACCOUNT + "=?",
-                new String[]{userAccount},
+                new String[]{userName},
                 null,
                 null,
                 DbContract.UserEntry._ID
@@ -236,7 +256,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onDestroy();
     }
 
-    private void initView() {
+    private void init() {
         setContentView(R.layout.activity_login);
 
         mRegisterView = findViewById(R.id.lt_register);
@@ -259,5 +279,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLoginButton.setOnClickListener(this);
         findViewById(R.id.bt_register).setOnClickListener(this);
         findViewById(R.id.fab_close).setOnClickListener(this);
+
+        // 数据
+        mReadableDb = new UserDbHelper(this).getReadableDatabase();
+        mWritableDb = new UserDbHelper(this).getWritableDatabase();
     }
 }

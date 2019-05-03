@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.linkgame.BuildConfig;
 import com.example.linkgame.activities.GameActivity;
+import com.example.linkgame.fragments.GameFragment;
 import com.example.linkgame.utils.ImageUtil;
 import com.example.linkgame.utils.LinkUtils;
 
@@ -29,7 +30,7 @@ public class GameService {
 
     //-处理ImageView 的点击事件--------------------------------------------------
     // 保存已经被选择的View, -1表示当前没有View被选中
-    private static int savedViewIndex = -1;
+    public static int savedViewIndex = -1;
 
     /**
      * 处理ImageView 的点击事件
@@ -37,8 +38,11 @@ public class GameService {
      * @param viewIndex ImageView 在数组中的位置
      */
     public static void onImageClick(int viewIndex, Handler handler) {
+        if(GameFragment.isGamePause){
+            return;
+        }
         if (BuildConfig.DEBUG)
-            Log.d("GameService", "控件: " + viewIndex + "被点击了!" + "picTag为: " + ViewOp.getPicTag(viewIndex));
+            Log.d("GameService", "控件: " + viewIndex + "被点击了!" );
         // 如果被点击的view 没有textTag, 则 取消已经被选中的view
         if (!ViewOp.hasPicTag(viewIndex)) {
             setSelectedView(-1);
@@ -62,7 +66,7 @@ public class GameService {
                     Message m = Message.obtain();
                     m.what = GameActivity.MSG_WHAT_HIDE_INDEX_LINK;
                     m.obj = indexLink;
-                    handler.sendMessageDelayed(m, 300);
+                    handler.sendMessageDelayed(m, 500);
                 }
                 // 从 list中移除被消除的 Pic
                 removeByPicTag(ViewOp.getPicTag(savedViewIndex));
@@ -93,8 +97,6 @@ public class GameService {
             return false;
         }
         return ViewOp.isPicTagMatch(currentViewIndex, savedViewIndex);
-//        int t = (int) GameFragment.sImageViewArr[savedViewIndex].getTag(R.id.PicTag);
-//        return t + (t % 2 == 0 ? 1 : -1) == currentPicTag;
     }
 
     /**

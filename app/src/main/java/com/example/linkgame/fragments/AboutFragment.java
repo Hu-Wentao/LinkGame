@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.linkgame.R;
 
-public class RankFragment extends Fragment {
+public class AboutFragment extends Fragment {
 
 
     @Override
@@ -22,8 +22,9 @@ public class RankFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rank, container, false);
+        return inflater.inflate(R.layout.fragment_about, container, false);
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -34,5 +35,4 @@ public class RankFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 }

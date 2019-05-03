@@ -10,4 +10,11 @@ public class DbContract {
         public static final String COLUMN_USER_PWD = "userPwd";
     }
 
+    // 分数表
+    public static final class ScoreEntry implements BaseColumns{
+        public static final String TABLE_NAME = "score";
+        public static final String COLUMN_RECORD_SCORE = "recordScore";
+        public static final String COLUMN_RECORD_ACCOUNT = "recordUser";
+    }
+
 }

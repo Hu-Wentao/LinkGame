@@ -27,9 +27,7 @@ public class ImageUtil {
      */
     public static Pic[] getRandomDrawableArr(int size) {
         if (size % 2 != 0) {
-//            System.out.println("size"+size);   //todo
             throw new IllegalArgumentException("参数必须是偶数");
-//            size--;
         }
         Random r = new Random();
         Pic[] tmp = new Pic[size];

@@ -21,7 +21,8 @@ public class Config {
     /**
      * 一局游戏的时长
      */
-    public static final int GAME_TIME = 120 * 1000;
+    public static final int NORMAL_GAME_TIME = 120 * 1000;
+    public static final int HARD_GAME_TIME = 80 * 1000;
 
     /**
      * 布局中View 的Margin
