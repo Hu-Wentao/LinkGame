@@ -21,7 +21,6 @@ import com.example.linkgame.game.Config;
 import com.example.linkgame.game.GameService;
 import com.example.linkgame.game.ViewOp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class GameActivity extends AppCompatActivity {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_WHAT_START_NEW_GAME:    // 开始新游戏
-                    if (BuildConfig.DEBUG) Log.d("GameActivity", "进入 MSG_WHAT_START_NEW_GAME");
+//                    if (BuildConfig.DEBUG) Log.d("GameActivity", "进入 MSG_WHAT_START_NEW_GAME");
                     int currentGameType = msg.arg1; // 0为普通, 1为挑战
 
                     // 开启音乐
@@ -144,6 +143,7 @@ public class GameActivity extends AppCompatActivity {
                     // 发送一个消息
                     Message.obtain(handler, GameActivity.MSG_WHAT_INTERVAL, (int) (millisUntilFinished / 1000), 0).sendToTarget();
                 }
+
                 @Override
                 public void onFinish() {
                     handler.sendEmptyMessage(GameActivity.MSG_WHAT_OVER);
@@ -161,7 +161,7 @@ public class GameActivity extends AppCompatActivity {
                 timer = getTimer(gameTime, handler);
                 GameService.savedViewIndex = -1;
             }
-            if(saveMillisUntilFinished == -2){  // 如果游戏时重新开始
+            if (saveMillisUntilFinished == -2) {  // 如果游戏时重新开始
                 GameService.savedViewIndex = -1;
             }
             timer.start();
@@ -203,7 +203,7 @@ public class GameActivity extends AppCompatActivity {
 
     //------------------------------------------------------------
     private long pressBackCache;
-        Fragment[] fragmentArr;
+    Fragment[] fragmentArr;
 //    ArrayList<Fragment> fragmentArr = new ArrayList<>(3);
 
     @Override
@@ -261,6 +261,10 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        fragmentArr[1].onPause();   // 间接使用  暂停游戏 方法
+        if (fragmentArr[1] != null) {
+            fragmentArr[1].onPause();   // 间接使用  暂停游戏 方法
+        }
     }
+
+
 }

@@ -119,15 +119,14 @@ public class ViewOp {
     }
     // true: 该控件有picTag
     public static boolean hasPicTag(int index) {
+        if(index>=picTagArr.length){
+            return false;
+        }
         return picTagArr[index] != null;
     }
 
     // true: 两个 view 的tag 是中英对应的
     static boolean isPicTagMatch(int viewIndexA, int viewIndexB) {
-//        if (picTagArr[viewIndexA] == null || picTagArr[viewIndexB] == null) {
-//            Log.d(TAG, "异常!  错误的匹配: viewIndexA:" + viewIndexA + " viewIndexB: " + viewIndexB);
-//            // 可能是由于布局变化导致的, 应当在布局刷新之后, 重置已设为标记的view (已完成)
-//        }
         int tagA = picTagArr[viewIndexA], tagB = picTagArr[viewIndexB];
         return tagA + (tagA % 2 == 0 ? 1 : -1) == tagB;
     }
