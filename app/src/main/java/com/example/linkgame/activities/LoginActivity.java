@@ -72,7 +72,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void switchLoginView() {
-        isVisitorLogin = !isVisitorLogin;
+        switchLoginView(isVisitorLogin = !isVisitorLogin);
+    }
+
+    void switchLoginView(boolean isVisitorLogin) {
         mTitleView.setText(isVisitorLogin ? "游客登录" : "用户登录");
 
         ObjectAnimator alpha = ObjectAnimator.ofFloat(mRegisterTipView, "alpha", isVisitorLogin ? 1F : 0F, isVisitorLogin ? 0F : 1F);
@@ -89,8 +92,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mLoginPasswordView.setVisibility(View.VISIBLE);
             mLoginButton.setText("登录");
         }
-
-
     }
 
     public void toggleRegisterView(boolean isOpen) {
@@ -166,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mRegisterUserNameView.setError("用户名不能为空");
             focusView = mRegisterUserNameView;
             cancel = true;
-        }else { // 检测用户名是否重复
+        } else { // 检测用户名是否重复
             Cursor cursor = mReadableDb.query(DbContract.UserEntry.TABLE_NAME,
                     new String[]{DbContract.UserEntry.COLUMN_USER_PWD},
                     DbContract.UserEntry.COLUMN_USER_ACCOUNT + "=?",
@@ -197,19 +198,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             addNewUser(userName, password);
             SharedData.setCurrentAccount(userName);
-            startActivity(new Intent(this, GameActivity.class));
+//            startActivity(new Intent(this, GameActivity.class));
+            toggleRegisterView(false);  // 关闭 注册面板
+
         }
     }
 
     //----------数据库操作
-    private SQLiteDatabase mReadableDb ;
+    private SQLiteDatabase mReadableDb;
     private SQLiteDatabase mWritableDb;
 
     /**
      * 检测用户名密码是否正确
      *
      * @param userName 用户名
-     * @param pwd         密码
+     * @param pwd      密码
      * @return 是否登录
      */
     private boolean check(String userName, String pwd) {
@@ -252,7 +255,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
-//        mDataManager.cancelLoading();
         super.onDestroy();
     }
 

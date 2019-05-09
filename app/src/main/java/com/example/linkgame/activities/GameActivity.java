@@ -20,6 +20,7 @@ import com.example.linkgame.game.BackgroundMusic;
 import com.example.linkgame.game.Config;
 import com.example.linkgame.game.GameService;
 import com.example.linkgame.game.ViewOp;
+import com.example.linkgame.utils.Protected;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,15 +52,17 @@ public class GameActivity extends AppCompatActivity {
                     int currentGameType = msg.arg1; // 0为普通, 1为挑战
 
                     // 开启音乐
+                    if (BuildConfig.DEBUG) Log.d("GameActivity", "新游戏开始, 开启背景音乐....");
                     bgMusic.playBackgroundMusic(BG_MUSIC, true);
 
                     SharedData.setInt(SharedData.CURRENT_GAME_TYPE, currentGameType); // 当前游戏模式
                     changePage(1);
+
                     // 开始计时器
-                    GameTimer.start((currentGameType == 0 ? Config.NORMAL_GAME_TIME : Config.HARD_GAME_TIME), mGameHandler);
+                    GameTimer.start((currentGameType == 0 ? Config.NORMAL_GAME_TIME : Config.HARD_GAME_TIME), mGameHandler, true);
                     break;
                 case MSG_WHAT_PAUSE:    // 游戏暂停 或 继续
-                    if (BuildConfig.DEBUG) Log.d("GameActivity", "收到 暂停或继续 message");
+                    if (BuildConfig.DEBUG) Log.d("GameActivity", "收到 暂停 message");
                     // 在离开app 或 点击暂停按钮 时自动调用,
                     ((GameFragment) msg.obj).handlePlayOrPauseBtn(true);
                     // 暂停音乐
@@ -86,7 +89,8 @@ public class GameActivity extends AppCompatActivity {
 
                     handleGameOver(GameService.getCurrentDrawableList(-1).isEmpty() && GameTimer.getRemainTime() > 0);
                     // 结束背景音乐
-                    bgMusic.stopBackgroundMusic();
+//                    bgMusic.stopBackgroundMusic();
+                    bgMusic.end();
                     // 结束计时器
                     GameTimer.cancel();
                     break;
@@ -151,13 +155,13 @@ public class GameActivity extends AppCompatActivity {
             };
         }
 
-        public static int getRemainTime() {
+        static int getRemainTime() {
             return (int) (saveMillisUntilFinished / 1000);
         }
 
         // 开始
-        public static void start(long gameTime, final Handler handler) {
-            if (timer == null) {
+        public static void start(long gameTime, final Handler handler, boolean isNewGame) {
+            if (isNewGame) {
                 timer = getTimer(gameTime, handler);
                 GameService.savedViewIndex = -1;
             }
@@ -177,7 +181,7 @@ public class GameActivity extends AppCompatActivity {
 
         // 恢复
         public static void play(Handler handler) {
-            start(saveMillisUntilFinished, handler);
+            start(saveMillisUntilFinished, handler, false);
         }
 
         // 取消计时器
@@ -210,10 +214,14 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        if (SharedData.getCurrentAccount() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
+//        if (SharedData.getCurrentAccount() == null) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//        }
+        // 改成: 退出游戏就有重新登录
+        if (SharedData.getCurrentAccount() != null) {
+            SharedData.setCurrentAccount(null);
         }
+        startActivity(new Intent(this, LoginActivity.class));
 
         bgMusic = new BackgroundMusic();
         initPage();
@@ -228,6 +236,9 @@ public class GameActivity extends AppCompatActivity {
 
 
     public void changePage(int index) {
+        if(index == 0){
+            bgMusic.stopBackgroundMusic();
+        }
         if (index == 1) {
             fragmentArr[1] = new GameFragment();
         }
@@ -253,8 +264,9 @@ public class GameActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         String action = getIntent().getAction();
 
-//        if (BuildConfig.DEBUG) Log.d("GameActivity", "进入onNewIntent方法.... action:"+action);
+        if (BuildConfig.DEBUG) Log.d("GameActivity", "进入onNewIntent方法.... action:"+action);
 //        if(SharedData.INTENT_TO_START.equals(action))
+        // 在这里进行 "重新进入app时, 自动继续上局游戏"
         changePage(0);
     }
 
@@ -265,6 +277,4 @@ public class GameActivity extends AppCompatActivity {
             fragmentArr[1].onPause();   // 间接使用  暂停游戏 方法
         }
     }
-
-
 }

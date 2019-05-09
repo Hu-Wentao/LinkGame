@@ -30,11 +30,9 @@ public class StartFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_start, container, false);
-
         initView(v);
 
         return v;
-
     }
     private void initView(View v){
         v.findViewById(R.id.btn_gameType1).setOnClickListener(this);
@@ -67,7 +65,7 @@ public class StartFragment extends Fragment implements View.OnClickListener{
 //                startActivity(new Intent(getActivity(), LoginActivity.class));
                 // 改为直接退出游戏
                 getActivity().finish();
-                break;
+                return;
             default:
                 if (BuildConfig.DEBUG) Log.d("swR+GameActivity", "未处理的点击事件...");
         }

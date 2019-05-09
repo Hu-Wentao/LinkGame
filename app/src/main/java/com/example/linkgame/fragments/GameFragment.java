@@ -47,8 +47,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * @param gameStyle 游戏模式 GameService.STYLE_
      */
     public void initGame(int rows, int cols, int gameStyle) {
-
-
         mGridLayout.removeAllViews();
         // 设置layout 网格 行, 列
         mGridLayout.setRowCount(rows);
@@ -145,6 +143,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_backToStart:
                 ((GameActivity)getActivity()).changePage(0);
+                break;    // 此处应该不需要break
             case R.id.iv_pause:
                 // 暂停与开始
                 isGamePause = !isGamePause;
@@ -158,17 +157,17 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 if (BuildConfig.DEBUG) Log.d("GameFragment", "重排布局 被点击了");
                 Message.obtain(mGameHandler, GameActivity.MSG_WHAT_RE_LAYOUT, this).sendToTarget();
                 break;
-            case R.id.btn_go_rank:
-                // 进入分数排行页, (保存分数应该在 游戏结束Message 页进行)
-                ((GameActivity)getActivity()).changePage(2);
-                break;
+//            case R.id.btn_go_rank:
+//                // 进入分数排行页, (保存分数应该在 游戏结束Message 页进行)
+//                ((GameActivity)getActivity()).changePage(2);
+//                break;
             default:
                 if (BuildConfig.DEBUG) Log.d("swR+GameFragment", "未处理的点击事件...");
         }
     }
 
     public void handleGameResultPage( boolean isSuccess){
-        // todo 显示 成功/失败 对话框
+        //  显示 成功/失败 对话框
         showNormalDialog(isSuccess);
     }
 
@@ -185,8 +184,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
          * @setMessage 设置对话框消息提示
          * setXXX方法返回Dialog对象，因此可以链式设置属性
          */
+        Context context = getContext();
         final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(getActivity());
+                new AlertDialog.Builder(context);
         normalDialog.setIcon(isSuccess? R.drawable.ic_dialog_success : R.drawable.ic_dialog_lost);
         normalDialog.setTitle("游戏"+(isSuccess?"成功":"失败"));
 //        normalDialog.setMessage("你要点击哪一个按钮呢?");

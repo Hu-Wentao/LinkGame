@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+import com.example.linkgame.BuildConfig;
 import com.example.linkgame.utils.MyApplication;
 
 public class BackgroundMusic {
@@ -36,6 +37,8 @@ public class BackgroundMusic {
      * @param isLoop :是否循环播放
      */
     public void playBackgroundMusic(String path, boolean isLoop) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "已经开始播放背景音乐!");
+
         if (mCurrentPath == null) {
             //这是第一次播放背景音乐--- it is the first time to play background music
             //或者是执行end()方法后，重新被叫---or end() was called
@@ -94,6 +97,9 @@ public class BackgroundMusic {
      * 停止播放背景音乐
      */
     public void stopBackgroundMusic() {
+        if (BuildConfig.DEBUG) Log.d(TAG, "停止 播放背景音乐!");
+
+
         if (mBackgroundMediaPlayer != null) {
             mBackgroundMediaPlayer.stop();
             // should set the state, if not , the following sequence will be error
@@ -106,6 +112,8 @@ public class BackgroundMusic {
      * 暂停播放背景音乐
      */
     public void pauseBackgroundMusic() {
+        if (BuildConfig.DEBUG) Log.d(TAG, "暂停 播放背景音乐!");
+
         if (mBackgroundMediaPlayer != null && mBackgroundMediaPlayer.isPlaying()) {
             mBackgroundMediaPlayer.pause();
             this.mIsPaused = true;
@@ -116,6 +124,8 @@ public class BackgroundMusic {
      * 继续播放背景音乐
      */
     public void resumeBackgroundMusic() {
+        if (BuildConfig.DEBUG) Log.d(TAG, "继续 播放背景音乐!");
+
         if (mBackgroundMediaPlayer != null && this.mIsPaused) {
             mBackgroundMediaPlayer.start();
             this.mIsPaused = false;

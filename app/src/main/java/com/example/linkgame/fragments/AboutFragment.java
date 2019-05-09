@@ -29,16 +29,14 @@ public class AboutFragment extends Fragment {
         return v;
     }
 
-    private void initView(View v){
-        ImageView backToStart = v.findViewById(R.id.iv_backToStart);
-        backToStart.setOnClickListener(new View.OnClickListener() {
+    private void initView(View v) {
+        v.findViewById(R.id.iv_backToStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((GameActivity)getActivity()).changePage(0);
+                ((GameActivity) getActivity()).changePage(0);
             }
         });
     }
-
 
     @Override
     public void onAttach(Context context) {

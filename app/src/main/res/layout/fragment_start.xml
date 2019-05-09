@@ -41,7 +41,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/shape_radius"
         android:backgroundTint="@color/btnColor"
-        android:text="退出登录"
+        android:text="退出"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
         app:layout_constraintHorizontal_bias="0.0"
