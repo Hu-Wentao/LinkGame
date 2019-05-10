@@ -1,5 +1,6 @@
 package com.example.linkgame.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -122,6 +123,10 @@ public class GameActivity extends AppCompatActivity {
                     ViewOp.setFlag(false, list);
                     break;
                 default:
+                    if (BuildConfig.DEBUG) Log.d("GameActivity", "其他消息");
+
+                    Toast.makeText(GameActivity.this, "请打开网络连接", Toast.LENGTH_SHORT).show();
+                    GameActivity.super.finish();
                     return false;
             }
             return false;
@@ -161,11 +166,8 @@ public class GameActivity extends AppCompatActivity {
 
         // 开始
         public static void start(long gameTime, final Handler handler, boolean isNewGame) {
+            timer = getTimer(gameTime, handler);
             if (isNewGame) {
-                timer = getTimer(gameTime, handler);
-                GameService.savedViewIndex = -1;
-            }
-            if (saveMillisUntilFinished == -2) {  // 如果游戏时重新开始
                 GameService.savedViewIndex = -1;
             }
             timer.start();
@@ -181,6 +183,7 @@ public class GameActivity extends AppCompatActivity {
 
         // 恢复
         public static void play(Handler handler) {
+            if (BuildConfig.DEBUG) Log.d("GameTimer", "正在恢复倒计时...");
             start(saveMillisUntilFinished, handler, false);
         }
 
@@ -214,6 +217,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
 //        if (SharedData.getCurrentAccount() == null) {
 //            startActivity(new Intent(this, LoginActivity.class));
 //        }
@@ -221,10 +225,15 @@ public class GameActivity extends AppCompatActivity {
         if (SharedData.getCurrentAccount() != null) {
             SharedData.setCurrentAccount(null);
         }
+
         startActivity(new Intent(this, LoginActivity.class));
 
-        bgMusic = new BackgroundMusic();
+        bgMusic = new
+
+                BackgroundMusic();
+
         initPage();
+
         changePage(0);
     }
 
@@ -236,7 +245,7 @@ public class GameActivity extends AppCompatActivity {
 
 
     public void changePage(int index) {
-        if(index == 0){
+        if (index == 0) {
             bgMusic.stopBackgroundMusic();
         }
         if (index == 1) {
@@ -264,11 +273,25 @@ public class GameActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         String action = getIntent().getAction();
 
-        if (BuildConfig.DEBUG) Log.d("GameActivity", "进入onNewIntent方法.... action:"+action);
+        if (BuildConfig.DEBUG) Log.d("GameActivity", "进入onNewIntent方法.... action:" + action);
 //        if(SharedData.INTENT_TO_START.equals(action))
         // 在这里进行 "重新进入app时, 自动继续上局游戏"
         changePage(0);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!Protected.checkAppAvailable()) {   // 检测软件是否允许使用的
+                    Message.obtain(mGameHandler, -99).sendToTarget();
+                }
+            }
+        }).start();
+    }
+
 
     @Override
     protected void onPause() {

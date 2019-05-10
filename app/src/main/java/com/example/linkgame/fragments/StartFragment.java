@@ -1,7 +1,6 @@
 package com.example.linkgame.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 import com.example.linkgame.activities.GameActivity;
-import com.example.linkgame.activities.LoginActivity;
 import com.example.linkgame.db.SharedData;
 import com.example.linkgame.game.GameService;
 

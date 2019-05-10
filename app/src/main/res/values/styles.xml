@@ -21,7 +21,6 @@
         <item name="colorControlActivated">#FFCC00</item>
     </style>
 
-
     <style name="ClazzSpinner" parent="Widget.AppCompat.Spinner">
         <item name="android:popupBackground">@color/colorAccent</item>
         <item name="android:dropDownWidth">150dp</item>

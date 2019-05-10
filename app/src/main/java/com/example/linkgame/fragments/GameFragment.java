@@ -143,6 +143,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_backToStart:
                 ((GameActivity)getActivity()).changePage(0);
+                Message.obtain(mGameHandler, GameActivity.MSG_WHAT_OVER).sendToTarget();
                 break;    // 此处应该不需要break
             case R.id.iv_pause:
                 // 暂停与开始
@@ -185,6 +186,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
          * setXXX方法返回Dialog对象，因此可以链式设置属性
          */
         Context context = getContext();
+        if(context == null){
+            if (BuildConfig.DEBUG) Log.w("GameFragment", "无法获取到Context, 可能是因为游戏尚未结束就返回主页导致的");
+            return;
+        }
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(context);
         normalDialog.setIcon(isSuccess? R.drawable.ic_dialog_success : R.drawable.ic_dialog_lost);

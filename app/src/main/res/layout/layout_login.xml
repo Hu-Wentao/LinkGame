@@ -123,11 +123,13 @@
                     android:id="@+id/bt_login"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/bt_shape"
+                    android:background="@drawable/shape_radius"
+                    android:backgroundTint="@android:color/holo_orange_light"
                     android:stateListAnimator="@drawable/state_list_animator_z"
                     android:text="@string/login"
-                    android:textColor="#d3d3d3"
-                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:targetApi="lollipop"/>
             </RelativeLayout>
 

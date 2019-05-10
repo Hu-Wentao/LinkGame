@@ -145,6 +145,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 intent.putExtra(SharedData.INTENT_MSG, SharedData.INTENT_TO_START);   //todo extra 问题
                 startActivity(new Intent(this, GameActivity.class));
+                this.finish();
             }
         }
 
