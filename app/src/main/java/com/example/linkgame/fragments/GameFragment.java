@@ -78,7 +78,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             } else {
                 ViewOp.bindPicToView(i, null);
             }
-            ViewOp.get(i).setTag(R.id.imageViewIndex, i);  // todo 现在点击事件时会用到, 暂时不删 - imageViewIndex 考虑替代(picTag已替代)
+            ViewOp.get(i).setTag(R.id.imageViewIndex, i);
             //--将ImageView 添加到 点击监听器--------------------------------------------------------
             ViewOp.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
