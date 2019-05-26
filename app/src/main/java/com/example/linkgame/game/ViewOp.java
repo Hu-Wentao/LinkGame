@@ -127,9 +127,10 @@ public class ViewOp {
     }
 
     // true: 两个 view 的tag 是奇偶对应的
+    // 或者 tagA 与 tagB相等
     static boolean isPicTagMatch(int viewIndexA, int viewIndexB) {
         int tagA = picTagArr[viewIndexA], tagB = picTagArr[viewIndexB];
-        return tagA + (tagA % 2 == 0 ? 1 : -1) == tagB;
+        return tagA + (tagA % 2 == 0 ? 1 : -1) == tagB || tagA == tagB;
     }
 
     /**

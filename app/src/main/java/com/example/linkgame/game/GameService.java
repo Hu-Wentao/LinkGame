@@ -38,11 +38,11 @@ public class GameService {
      * @param viewIndex ImageView 在数组中的位置
      */
     public static void onImageClick(int viewIndex, Handler handler) {
-        if(GameFragment.isGamePause){
+        if (GameFragment.isGamePause) {
             return;
         }
         if (BuildConfig.DEBUG)
-            Log.d("GameService", "控件: " + viewIndex + "被点击了!" );
+            Log.d("GameService", "控件: " + viewIndex + "被点击了! tag: " + (ViewOp.hasPicTag(viewIndex)?ViewOp.getPicTag(viewIndex):"无tag"));
         // 如果被点击的view 没有textTag, 则 取消已经被选中的view
         if (!ViewOp.hasPicTag(viewIndex)) {
             setSelectedView(-1);
@@ -136,15 +136,15 @@ public class GameService {
      * @return 该布局所需的随机图片数
      */
     public static int getNeedDrawableNum(int STYLE, int... rowsAndCols) {
-        return (rowsAndCols[0] + rowsAndCols[1] - 1) * 2;   // 只要一种模式
-//        switch (STYLE) {
-//            case STYLE_HORIZONTAL:
-//                return rowsAndCols[1] * (rowsAndCols[0] / 2 + (rowsAndCols[0] % 2));
-//            case STYLE_FILL:
+        switch (STYLE) {
+            case STYLE_HORIZONTAL:
+                return rowsAndCols[1] * (rowsAndCols[0] / 2 + (rowsAndCols[0] % 2));
+            case STYLE_FILL:
 //                return (rowsAndCols[0] + rowsAndCols[1] - 1) * 2;
-//            default:
-//                throw new RuntimeException("未知STYLE: " + STYLE);
-//        }
+                return  (rowsAndCols[0]-2)*(rowsAndCols[1]-2);
+            default:
+                throw new RuntimeException("未知STYLE: " + STYLE);
+        }
     }
 
     //为layout里的特定index view设置 图片, 非特定的设置默认图(白色填充)
@@ -183,9 +183,9 @@ public class GameService {
      * 获取当前正在显示的 文字图片, 如果当前没有, 则自动生成随机的
      *
      * @param initSize 是否刷新当前已保存的数组( 应当在重新开始一局游戏 的时候 指定一个值 否则应当输入 -1, 以获取当前的 list)
-     *                    如果isRefresh == true 或者当前没有正在显示的图片数组的话,
-     *                    则自动产生 defaultSize个元素
-     *                    图片数量(必须是偶数)(已在内部方法中完成检验步骤)
+     *                 如果isRefresh == true 或者当前没有正在显示的图片数组的话,
+     *                 则自动产生 defaultSize个元素
+     *                 图片数量(必须是偶数)(已在内部方法中完成检验步骤)
      * @return Drawable数组
      */
     public static LinkedList<Pic> getCurrentDrawableList(int initSize) {

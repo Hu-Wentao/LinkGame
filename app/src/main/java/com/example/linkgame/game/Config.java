@@ -10,7 +10,7 @@ public class Config {
      * 网格布局的列数 与 行数
      */
     public static final int
-            GRID_ROWS = 9,  // 行数
+            GRID_ROWS = 10,  // 行数
             GRID_COLS = 6;  // 列数
 
     /**

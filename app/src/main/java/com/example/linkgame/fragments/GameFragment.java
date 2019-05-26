@@ -54,11 +54,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         // 初始化 ImageViewArr
         ViewOp.initViewArr(cols*rows);
 
-        // 获取随机的图片LIst
+        // 获取随机的图片List
         List<Pic> picList = GameService.getCurrentDrawableList(GameService.getNeedDrawableNum(
                 SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0),
                 rows, cols)
         );
+        if (BuildConfig.DEBUG) Log.d("GameFragment", "随机图片list picList.size : " + picList.size());
 
         // 将图片设置为ImageView的 background, 然后添加进Layout
         int currentDrawableIndex = 0;
