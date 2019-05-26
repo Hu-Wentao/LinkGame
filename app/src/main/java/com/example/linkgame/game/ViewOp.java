@@ -114,18 +114,19 @@ public class ViewOp {
     }
 
     //======== is =======================================================================
-    public static boolean isLegalIndex(int index){
-        return index>0 && index< Config.GRID_COLS*Config.GRID_ROWS;
+    public static boolean isLegalIndex(int index) {
+        return index > 0 && index < Config.GRID_COLS * Config.GRID_ROWS;
     }
+
     // true: 该控件有picTag
     public static boolean hasPicTag(int index) {
-        if(index>=picTagArr.length){
+        if (index >= picTagArr.length) {
             return false;
         }
         return picTagArr[index] != null;
     }
 
-    // true: 两个 view 的tag 是中英对应的
+    // true: 两个 view 的tag 是奇偶对应的
     static boolean isPicTagMatch(int viewIndexA, int viewIndexB) {
         int tagA = picTagArr[viewIndexA], tagB = picTagArr[viewIndexB];
         return tagA + (tagA % 2 == 0 ? 1 : -1) == tagB;
@@ -165,12 +166,13 @@ public class ViewOp {
 
     /**
      * 给路径上的空白图换成红点图 img_point
+     *
      * @param indexLink
      */
-    public static void setFlag(boolean isSet, List indexLink){
+    public static void setFlag(boolean isSet, List indexLink) {
         Iterator it = indexLink.iterator();
-        while (it.hasNext()){
-            get((Integer)it.next()).setImageDrawable(MyApplication.getContext().getDrawable(isSet?R.drawable.img_point:R.drawable.img_blank));
+        while (it.hasNext()) {
+            get((Integer) it.next()).setImageDrawable(MyApplication.getContext().getDrawable(isSet ? R.drawable.img_point : R.drawable.img_blank));
         }
     }
 }

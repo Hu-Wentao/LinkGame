@@ -220,6 +220,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         v = inflater.inflate(R.layout.fragment_game, container, false);
         init(v);
         int gameStyle = SharedData.getInt(SharedData.CURRENT_GAME_TYPE, 0);
+        if (BuildConfig.DEBUG) Log.d("GameFragment", "gameStyle:" + gameStyle); //todo=====
+
         initGame(Config.GRID_ROWS, Config.GRID_COLS, gameStyle);   // 通过Activity的 hand
         return v;
     }

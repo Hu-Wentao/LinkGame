@@ -1,6 +1,5 @@
 package com.example.linkgame.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -16,12 +15,12 @@ import com.example.linkgame.R;
 import com.example.linkgame.db.SharedData;
 import com.example.linkgame.fragments.AboutFragment;
 import com.example.linkgame.fragments.GameFragment;
+import com.example.linkgame.fragments.RuleFragment;
 import com.example.linkgame.fragments.StartFragment;
 import com.example.linkgame.game.BackgroundMusic;
 import com.example.linkgame.game.Config;
 import com.example.linkgame.game.GameService;
 import com.example.linkgame.game.ViewOp;
-import com.example.linkgame.utils.Protected;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +36,7 @@ public class GameActivity extends AppCompatActivity {
             MSG_WHAT_PLAY = 2,
             MSG_WHAT_OVER = 3;
     public static final int
-            MSG_WHAT_REFRESH = 11,
+//            MSG_WHAT_REFRESH = 11,
             MSG_WHAT_INTERVAL = 12,
             MSG_WHAT_RE_LAYOUT = 13;
     public static final int
@@ -50,7 +49,7 @@ public class GameActivity extends AppCompatActivity {
             switch (msg.what) {
                 case MSG_WHAT_START_NEW_GAME:    // 开始新游戏
 //                    if (BuildConfig.DEBUG) Log.d("GameActivity", "进入 MSG_WHAT_START_NEW_GAME");
-                    int currentGameType = msg.arg1; // 0为普通, 1为挑战
+                    int currentGameType = msg.arg1;
 
                     // 开启音乐
                     if (BuildConfig.DEBUG) Log.d("GameActivity", "新游戏开始, 开启背景音乐....");
@@ -218,16 +217,6 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-//        if (SharedData.getCurrentAccount() == null) {
-//            startActivity(new Intent(this, LoginActivity.class));
-//        }
-        // 改成: 退出游戏就有重新登录
-        if (SharedData.getCurrentAccount() != null) {
-            SharedData.setCurrentAccount(null);
-        }
-
-        startActivity(new Intent(this, LoginActivity.class));
-
         bgMusic = new
 
                 BackgroundMusic();
@@ -238,9 +227,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initPage() {
-        fragmentArr = new Fragment[3];
+        fragmentArr = new Fragment[4];
         fragmentArr[0] = new StartFragment();
         fragmentArr[2] = new AboutFragment();
+        fragmentArr[3] = new RuleFragment();
     }
 
 
@@ -278,20 +268,6 @@ public class GameActivity extends AppCompatActivity {
         // 在这里进行 "重新进入app时, 自动继续上局游戏"
         changePage(0);
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!Protected.checkAppAvailable()) {   // 检测软件是否允许使用的
-                    Message.obtain(mGameHandler, -99).sendToTarget();
-                }
-            }
-        }).start();
-    }
-
 
     @Override
     protected void onPause() {

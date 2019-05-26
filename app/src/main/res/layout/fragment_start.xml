@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_background">
+    android:background="@drawable/img_bg">
 
     <Button
         android:id="@+id/btn_gameType1"
@@ -13,12 +13,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_radius"
         android:backgroundTint="@color/btnColor"
-        android:text="普通模式"
+        android:text="开始游戏"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.421" />
 
     <Button
         android:id="@+id/btn_about"
@@ -55,7 +57,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/shape_radius"
         android:backgroundTint="@color/btnColor"
-        android:text="困难模式"
+        android:text="游戏规则"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="@+id/btn_gameType1"
         app:layout_constraintHorizontal_bias="0.0"

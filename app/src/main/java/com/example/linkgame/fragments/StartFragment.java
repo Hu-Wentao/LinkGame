@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
 import com.example.linkgame.activities.GameActivity;
-import com.example.linkgame.db.SharedData;
 import com.example.linkgame.game.GameService;
 
 public class StartFragment extends Fragment implements View.OnClickListener{
@@ -49,18 +48,13 @@ public class StartFragment extends Fragment implements View.OnClickListener{
                 ((GameActivity)getActivity()).changePage(2);
                 return;
             case R.id.btn_gameType2:
+                ((GameActivity)getActivity()).changePage(3);    // 进入 ruleFragment
+                return;
+            case R.id.btn_gameType1:
                 t.what = GameActivity.MSG_WHAT_START_NEW_GAME;
                 t.arg1 = GameService.STYLE_FILL;
                 break;
-            case R.id.btn_gameType1:
-                t.what = GameActivity.MSG_WHAT_START_NEW_GAME;
-                t.arg1 = GameService.STYLE_HORIZONTAL;
-                break;
             case R.id.btn_logout:
-                // 退出账号
-                SharedData.setCurrentAccount(null);
-//                // 切换Activity
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
                 // 改为直接退出游戏
                 getActivity().finish();
                 return;

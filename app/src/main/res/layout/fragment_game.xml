@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frameLayout"
-    android:background="@drawable/img_game_background"
+    android:background="@drawable/img_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.GameFragment">

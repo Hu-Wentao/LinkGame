@@ -14,9 +14,10 @@ public class Config {
             GRID_COLS = 6;  // 列数
 
     /**
-     * 图片资源的数量 // 资源图片为 从0开始到 519, 其中偶数为中文图, 奇数为英文图
+     * 图片资源的数量 奇数, 偶数 序号的图片为一对 该参数表示的是 图片的对数(总数/2)
+     *  总数应当小于 GRID_ROWS * GRID_COLS
      */
-    public static final int ALL_IMG_NUM_PAIR = 259;
+    public static final int ALL_IMG_NUM_PAIR = 31;
 
     /**
      * 一局游戏的时长

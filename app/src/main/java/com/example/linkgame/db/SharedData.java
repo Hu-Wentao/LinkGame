@@ -16,10 +16,6 @@ public class SharedData {
     public static final String LOGIN_STATUS = "login_Status";       // 是否登录的key
     public static final String CURRENT_GAME_TYPE = "current_game_type"; // 当前游戏类型
 
-
-    public static final String INTENT_MSG = "intent_message";   // login 跳到 game 的时候, 指定的intent 的extra name
-    public static final String INTENT_TO_START = "startFragment";   // 跳转到 startFragment
-//    public static final char INTENT_TO_START = 's';   // 跳转到 startFragment
     //----------------------------------
     private static final String APP_DATE = "appDate";
     private static SharedPreferences preferences;

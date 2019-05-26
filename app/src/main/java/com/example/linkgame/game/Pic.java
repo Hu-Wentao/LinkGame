@@ -9,11 +9,16 @@ import android.graphics.drawable.Drawable;
  * @Date: 2019/4/21
  */
 public class Pic {
-    public Drawable drawable;
-    public int tag;
+    public Drawable drawable;   // 图片
+    public int tag;             // 标识图片的tag
 
     public Pic(Drawable drawable, int tag) {
         this.drawable = drawable;
         this.tag = tag;
+    }
+
+    @Override
+    public String toString() {
+        return "tag为: "+this.tag;
     }
 }
