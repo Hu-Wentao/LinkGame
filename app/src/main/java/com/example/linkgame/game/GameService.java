@@ -140,7 +140,7 @@ public class GameService {
             case STYLE_HORIZONTAL:
                 return rowsAndCols[1] * (rowsAndCols[0] / 2 + (rowsAndCols[0] % 2));
             case STYLE_FILL:
-                return (rowsAndCols[0] + rowsAndCols[1] - 1) * 2;
+                return (rowsAndCols[0]-2)*(rowsAndCols[1]-2);
             default:
                 throw new RuntimeException("未知STYLE" + STYLE);
         }

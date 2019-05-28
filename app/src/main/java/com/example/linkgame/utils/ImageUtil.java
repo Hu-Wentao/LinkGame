@@ -1,4 +1,5 @@
 package com.example.linkgame.utils;
+
 import android.graphics.drawable.Drawable;
 
 import com.example.linkgame.game.Config;
@@ -34,8 +35,8 @@ public class ImageUtil {
         // 从所有的图片对中随机的获取 size/2 个图片对(一共size张图)
         for (int i = 0; i < size; i++) {
             int t = r.nextInt(Config.ALL_IMG_NUM_PAIR);
-            tmp[i] = new Pic(getAllDrawable()[(t * 2)], i);
-            tmp[++i] = new Pic(getAllDrawable()[(t * 2 + 1)], i);
+            tmp[i] = new Pic(getAllDrawable()[(t * 2)], t * 2);
+            tmp[++i] = new Pic(getAllDrawable()[(t * 2 + 1)], t * 2 + 1);
         }
         return tmp;
     }
