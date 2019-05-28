@@ -140,7 +140,6 @@ public class GameService {
             case STYLE_HORIZONTAL:
                 return rowsAndCols[1] * (rowsAndCols[0] / 2 + (rowsAndCols[0] % 2));    // 横向斑马条纹式的排列
             case STYLE_FILL:
-//                return (rowsAndCols[0] + rowsAndCols[1] - 1) * 2;
                 return  (rowsAndCols[0]-2)*(rowsAndCols[1]-2);  // 四周没有图形,  只有中间有
             default:
                 throw new RuntimeException("未知STYLE: " + STYLE);
