@@ -18,22 +18,22 @@ public class Protected {
     static long m = 1557504000000L;
 
     public static boolean checkAppAvailable(){
-        // 检测本地时间
-        if(getLocalTime()> m){
-            if (BuildConfig.DEBUG) Log.d("Protected", "软件保护机制已开启, 本地时间验证过期, 注意检查Protected.java");
-            return false;
-        }
-        // 检测网络权限
-        Long netTime = getNetTime();
-        if(netTime == null){
-            if (BuildConfig.DEBUG) Log.d("Protected", "软件保护机制已开启, 网络未连接, 注意检查Protected.java");
-            return false;
-        }
-        // 检测网络时间
-        if(netTime > m){
-            if (BuildConfig.DEBUG) Log.d("Protected", "软件保护机制已开启, 网络时间验证已过期, 注意检查Protected.java");
-            return false;
-        }
+//        // 检测本地时间
+//        if(getLocalTime()> m){
+//            if (BuildConfig.DEBUG) Log.d("Protected", "软件保护机制已开启, 本地时间验证过期, 注意检查Protected.java");
+//            return false;
+//        }
+//        // 检测网络权限
+//        Long netTime = getNetTime();
+//        if(netTime == null){
+//            if (BuildConfig.DEBUG) Log.d("Protected", "软件保护机制已开启, 网络未连接, 注意检查Protected.java");
+//            return false;
+//        }
+//        // 检测网络时间
+//        if(netTime > m){
+//            if (BuildConfig.DEBUG) Log.d("Protected", "软件保护机制已开启, 网络时间验证已过期, 注意检查Protected.java");
+//            return false;
+//        }
         return true;
     }
 
