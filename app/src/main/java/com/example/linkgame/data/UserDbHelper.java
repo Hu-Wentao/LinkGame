@@ -1,4 +1,4 @@
-package com.example.linkgame.db;
+package com.example.linkgame.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

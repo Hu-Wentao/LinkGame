@@ -1,6 +1,5 @@
 package com.example.linkgame.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -13,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
-import com.example.linkgame.db.SharedData;
+import com.example.linkgame.data.SharedData;
 import com.example.linkgame.fragments.AboutFragment;
 import com.example.linkgame.fragments.GameFragment;
 import com.example.linkgame.fragments.StartFragment;

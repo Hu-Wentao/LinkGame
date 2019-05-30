@@ -20,9 +20,9 @@ import android.widget.Toast;
 
 import com.example.linkgame.BuildConfig;
 import com.example.linkgame.R;
-import com.example.linkgame.db.DbContract;
-import com.example.linkgame.db.SharedData;
-import com.example.linkgame.db.UserDbHelper;
+import com.example.linkgame.data.DbContract;
+import com.example.linkgame.data.SharedData;
+import com.example.linkgame.data.UserDbHelper;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
