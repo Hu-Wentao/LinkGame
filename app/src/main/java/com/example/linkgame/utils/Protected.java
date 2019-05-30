@@ -57,7 +57,6 @@ public class Protected {
         return null;
     }
     private static long getLocalTime() {
-
         return System.currentTimeMillis();
     }
 }

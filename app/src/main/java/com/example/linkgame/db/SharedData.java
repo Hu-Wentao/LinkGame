@@ -2,6 +2,7 @@ package com.example.linkgame.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.example.linkgame.utils.MyApplication;
 
@@ -19,14 +20,19 @@ public class SharedData {
 
     public static final String INTENT_MSG = "intent_message";   // login 跳到 game 的时候, 指定的intent 的extra name
     public static final String INTENT_TO_START = "startFragment";   // 跳转到 startFragment
-//    public static final char INTENT_TO_START = 's';   // 跳转到 startFragment
     //----------------------------------
-    private static final String APP_DATE = "appDate";
-    private static SharedPreferences preferences;
+    private static volatile SharedPreferences preferences;
 
-    private static synchronized SharedPreferences getPreferences() {
-        if (preferences == null)
-            preferences = MyApplication.getContext().getSharedPreferences(APP_DATE, Context.MODE_PRIVATE);
+    private static SharedPreferences getPreferences() {
+        SharedPreferences temp = preferences;
+        if (temp == null) {
+            synchronized (SharedData.class) {
+                temp = preferences;
+                if (temp == null) {
+                    temp = preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
+                }
+            }
+        }
         return preferences;
     }
 
